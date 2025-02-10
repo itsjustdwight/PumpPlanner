@@ -4,11 +4,15 @@
   "description": "The group project needed to complete CSC 307. We'll create a Workout Planner application that tracks gym progress in an accessible and efficient way.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc"
   },
   "author": "",
   "license": "ISC",
   "workspaces": [
-      "packages/*"
-  ]
+    "packages/*"
+  ],
+  "devDependencies": {
+    "prettier": "^3.5.0"
+  }
 }
