@@ -1,6 +1,9 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
+const creds = [];
+
+
 export function registerUser(req, res) {
   const { username, pwd } = req.body; // from form
 
@@ -60,5 +63,34 @@ export function authenticateUser(req, res, next) {
         }
       }
     );
+  }
+}
+
+
+export function loginUser(req, res) {
+  const { username, pwd } = req.body; // from form
+  const retrievedUser = creds.find(
+    (c) => c.username === username
+  );
+
+  if (!retrievedUser) {
+    // invalid username
+    res.status(401).send("Unauthorized");
+  } else {
+    bcrypt
+      .compare(pwd, retrievedUser.hashedPassword)
+      .then((matched) => {
+        if (matched) {
+          generateAccessToken(username).then((token) => {
+            res.status(200).send({ token: token });
+          });
+        } else {
+          // invalid password
+          res.status(401).send("Unauthorized");
+        }
+      })
+      .catch(() => {
+        res.status(401).send("Unauthorized");
+      });
   }
 }
