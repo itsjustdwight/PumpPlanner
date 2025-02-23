@@ -38,6 +38,11 @@
     <header>
       <h1>PumpPlanner</h1>
     </header>
+    <script>
+      if (!sessionStorage.getItem("loggedIn")) {
+        window.location.href = "login.html";
+      }
+</script>
     <div class="calendar"></div>
   </body>
 </html>
