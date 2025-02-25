@@ -33,8 +33,16 @@ body {
 
 h1 {
   font-size: 3.2em;
+  font-family: "Anton", sans-serif;
   line-height: 1.1;
 }
+
+.anton-regular {
+  font-family: "Anton", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
 
 button {
   border-radius: 8px;
