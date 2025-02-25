@@ -36,7 +36,7 @@
   </head>
   <body>
     <header>
-      <h1>PumpPlanner</h1>
+      <h1>PUMPlanner</h1>
     </header>
     <script>
       if (!sessionStorage.getItem("loggedIn")) {
@@ -185,7 +185,7 @@
               cell.appendChild(cellText);
               row.appendChild(cell);
             } else if (date > daysInMonth) {
-              break; // stop creating cells if the days have exceeded the days in the month
+              break; 
             } else {
               let cell = document.createElement("td");
               let cellText = document.createTextNode(date);
@@ -214,13 +214,25 @@
   </body>
   <div class="icon-bar">
     <div class="icons">
-      <i class="fa fa-chart-line icon" title="Tracking"></i>
-      <i class="fa fa-dumbbell icon" title="Exercise Page"></i>
-      <i class="fa fa-cog icon" title="Settings"></i>
+        <a href="pages/tracking.html" class="icon">
+            <i class="fa fa-chart-line" title="Tracking"></i>
+        </a>
+
+        <a href="pages/exercise.html" class="icon">
+            <i class="fa fa-dumbbell" title="Exercise Page"></i>
+        </a>
+        <!-- Link to the Settings page -->
+        <a href="pages/settings.html" class="icon">
+            <i class="fa fa-cog" title="Settings"></i>
+        </a>
     </div>
-  </div>
-  </div>
-  <footer>
+</div> 
+<footer>
     <p>&copy; 2025 PumpPlanner. All rights reserved.</p>
+<<<<<<< HEAD
   </footer>
 </html>
+=======
+</footer>
+</html>
+>>>>>>> origin/icon
