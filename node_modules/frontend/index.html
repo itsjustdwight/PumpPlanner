@@ -9,8 +9,8 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0" />
     <title>PumpPlanner</title>
-    <link 
-      href="https://fonts.googleapis.com/css2?family=Anton&display=swap" 
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anton&display=swap"
       rel="stylesheet" />
     <style>
       body {
@@ -36,13 +36,13 @@
   </head>
   <body>
     <header>
-      <h1>PUMPlanner</h1>
+      <h1>Pumplanner</h1>
     </header>
     <script>
       if (!sessionStorage.getItem("loggedIn")) {
         window.location.href = "login.html";
       }
-</script>
+    </script>
     <div class="calendar"></div>
   </body>
 </html>
@@ -81,18 +81,22 @@
       .highlight {
         background-color: #4caf50; /* Vibrant green for highlights, adding energy */
         color: white;
-    }
-  .icon-bar {
-    background: linear-gradient(145deg, #4a4a4a, #2c2c2c); /* Stylish gradient from darker to lighter gray */
-    padding: 15px 0; /* Increased padding for better visual spacing */
-    margin-top: auto;
-    width: 100%;
-    box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.6); /* Enhanced shadow for more depth */
-    border-radius: 20px 20px 0 0; /* Softer rounded corners at the top */
-    display: flex;
-    justify-content: center; /* Ensures icons are centered */
-    align-items: center; /* Aligns icons vertically */
-  }
+      }
+      .icon-bar {
+        background: linear-gradient(
+          145deg,
+          #4a4a4a,
+          #2c2c2c
+        ); /* Stylish gradient from darker to lighter gray */
+        padding: 15px 0; /* Increased padding for better visual spacing */
+        margin-top: auto;
+        width: 100%;
+        box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.6); /* Enhanced shadow for more depth */
+        border-radius: 20px 20px 0 0; /* Softer rounded corners at the top */
+        display: flex;
+        justify-content: center; /* Ensures icons are centered */
+        align-items: center; /* Aligns icons vertically */
+      }
 
       .icons {
         margin-top: auto;
@@ -185,7 +189,7 @@
               cell.appendChild(cellText);
               row.appendChild(cell);
             } else if (date > daysInMonth) {
-              break; 
+              break;
             } else {
               let cell = document.createElement("td");
               let cellText = document.createTextNode(date);
@@ -214,25 +218,20 @@
   </body>
   <div class="icon-bar">
     <div class="icons">
-        <a href="pages/tracking.html" class="icon">
-            <i class="fa fa-chart-line" title="Tracking"></i>
-        </a>
+      <a href="pages/tracking.html" class="icon">
+        <i class="fa fa-chart-line" title="Tracking"></i>
+      </a>
 
-        <a href="pages/exercise.html" class="icon">
-            <i class="fa fa-dumbbell" title="Exercise Page"></i>
-        </a>
-        <!-- Link to the Settings page -->
-        <a href="pages/settings.html" class="icon">
-            <i class="fa fa-cog" title="Settings"></i>
-        </a>
+      <a href="pages/exercise.html" class="icon">
+        <i class="fa fa-dumbbell" title="Exercise Page"></i>
+      </a>
+      <!-- Link to the Settings page -->
+      <a href="pages/settings.html" class="icon">
+        <i class="fa fa-cog" title="Settings"></i>
+      </a>
     </div>
-</div> 
-<footer>
+  </div>
+  <footer>
     <p>&copy; 2025 PumpPlanner. All rights reserved.</p>
-<<<<<<< HEAD
   </footer>
 </html>
-=======
-</footer>
-</html>
->>>>>>> origin/icon
