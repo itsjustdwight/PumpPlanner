@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import "./auth.js";
+import { registerUser, loginUser, authenticateUser } from "./auth.js";
 import dotenv from "dotenv";
 import mongoose from "mongoose"
 import exerciseRoutes from "./exerciseRoutes.js";
