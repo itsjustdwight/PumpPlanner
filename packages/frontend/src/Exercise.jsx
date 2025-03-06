@@ -1,20 +1,20 @@
 import { useState } from "react";
 import React from "react";
-import ReactDOMClient from "react-dom/client";
+import { SearchBar } from "./ExComponents/SearchBar";
+import { SearchResultsList } from "./ExComponents/SearchResultsList";
+
 
 function App() {
+ const [results, setResults] = useState([]);
+
   return (
-    <div>
-      <h1>Hello, React!</h1>
+    <div className="App">
+      <div className="search-bar-container">
+        <SearchBar setResults={setResults} />
+        {results && results.length > 0 && <SearchResultsList results={results} />}
+      </div>
     </div>
   );
 }
 
-// Create the container
-const container = document.getElementById("root");
-
-// Create a root
-const root = ReactDOMClient.createRoot(container);
-
-// Initial render: Render an element to the Root
-root.render(<App/>);
+export default App;
