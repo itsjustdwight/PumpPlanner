@@ -13,24 +13,312 @@
       href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap"
       rel="stylesheet" />
     <style>
+      * {
+        box-sizing: border-box;
+      }
+
       body {
         font-family: "Montserrat", sans-serif;
-        color: #f0f0f0; /* Changed to soft white for better visibility against dark backgrounds */
+        color: #f0f0f0;
         background: url("background.jpg") no-repeat center
           center fixed;
         background-size: cover;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        margin: 0;
       }
+
       header {
         text-align: center;
-        padding: 20px 10%;
-        background-color: #1a1a1a; /* Semi-transparent black background for better readability */
+        padding: 20px 5%;
+        background-color: #1a1a1a;
       }
+
       h1 {
-        font-size: 48px; /* Larger font size for emphasis */
-        color: #ff2600; /* Vibrant tomato red, adds energy and is visually striking */
-        text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8); /* Subtle shadow to make the text pop out more */
+        font-size: 48px;
+        color: #ff2600;
+        text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
         margin: 0;
-        padding: 20px 0; /* Adding vertical padding to give more space around the text */
+        padding: 20px 0;
+      }
+
+      .calendar-container {
+        flex: 1;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+
+      /* Only when flipped, force container to fill viewport */
+      .calendar-container.flip-active {
+        height: 100vh;
+      }
+
+      .calendar {
+        background: #262626;
+        width: 100%;
+        height: 100%;
+        min-height: calc(100vh - 160px);
+        position: relative;
+        transform-style: preserve-3d;
+      }
+
+      .calendar th {
+        background-color: #333;
+      }
+
+      .month-navigation {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px;
+        border-bottom: 2px solid #333;
+      }
+
+      .nav-button {
+        background: #ff2600;
+        border: none;
+        color: white;
+        padding: 16px 30px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 20px;
+        transition: background 0.3s;
+      }
+
+      .nav-button:hover {
+        background: #ff4d32;
+      }
+
+      #current-month-year {
+        font-size: 32px;
+        color: #f0f0f0;
+        text-transform: uppercase;
+      }
+
+      .week-days {
+        display: flex;
+        justify-content: space-between;
+        padding: 15px 20px;
+        background-color: #333;
+        font-size: 20px;
+      }
+
+      .weeks {
+        padding: 15px 20px;
+      }
+
+      .week-row {
+        display: flex;
+        justify-content: space-evenly;
+        margin: 12px 0;
+        gap: 2px;
+      }
+
+      .calendar-day {
+        width: 90px;
+        height: 90px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 22px;
+        flex: 1;
+        max-width: 14%;
+        border-radius: 10px;
+        transition: all 0.2s;
+      }
+
+      .calendar-day:hover {
+        background-color: #333;
+      }
+
+      .calendar-day.active {
+        background-color: #ffea00;
+        color: white;
+        transform: scale(1.1);
+      }
+
+      .calendar-day.last-month {
+        opacity: 0.3;
+      }
+
+      .icon-bar {
+        background: linear-gradient(145deg, #4a4a4a, #2c2c2c);
+        padding: 20px 0;
+        width: 100%;
+        box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.6);
+      }
+
+      .icons {
+        display: flex;
+        justify-content: center;
+        gap: 40px;
+        font-size: 50px;
+      }
+
+      .icon {
+        color: #f0f0f0;
+        cursor: pointer;
+        transition: transform 0.2s;
+      }
+
+      .icon:hover {
+        transform: scale(1.1);
+      }
+
+      footer {
+        padding: 20px;
+        text-align: center;
+        background-color: #1a1a1a;
+        color: #f0f0f0;
+      }
+
+      /* Flip effect for event form */
+      .front,
+      .back {
+        backface-visibility: hidden;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        transition: 0.6s;
+      }
+
+      .back {
+        transform: rotateY(180deg);
+      }
+
+      .flip {
+        transform: rotateY(180deg);
+      }
+
+      /* Enhanced Workout Tracking Styles */
+      .workout-title-container {
+        margin-bottom: 20px;
+      }
+
+      #workout-title {
+        font-family: "Montserrat", sans-serif;
+        font-size: 32px;
+        padding: 15px;
+        width: 100%;
+        border: none;
+        border-bottom: 2px solid #ccc;
+        background: #262626;
+        color: #f0f0f0;
+        text-align: center;
+        outline: none;
+      }
+
+      .attendance-check {
+        margin-bottom: 20px;
+        padding: 15px;
+        background: #333;
+        border-radius: 8px;
+      }
+
+      .attendance-check label {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 20px;
+      }
+
+      #workout-checkbox {
+        width: 24px;
+        height: 24px;
+      }
+
+      .workout-log {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .exercise-entry {
+        display: flex;
+        gap: 10px;
+      }
+
+      .exercise-input,
+      .weight-input {
+        padding: 15px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        background: #333;
+        color: #f0f0f0;
+        outline: none;
+        transition:
+          border 0.3s,
+          box-shadow 0.3s;
+        font-size: 20px;
+      }
+
+      .exercise-input:focus,
+      .weight-input:focus {
+        border-color: #ff2600;
+        box-shadow: 0 0 5px rgba(255, 38, 0, 0.5);
+      }
+
+      .weight-input {
+        max-width: 120px;
+      }
+
+      .add-exercise {
+        background: #ff2600;
+        border: none;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        align-self: flex-start;
+        transition: background 0.3s;
+        font-size: 20px;
+      }
+
+      .add-exercise:hover {
+        background: #ff4d32;
+      }
+
+      .event-actions {
+        display: flex;
+        gap: 8px;
+        margin-top: 15px;
+      }
+
+      .event-actions button {
+        flex: 1;
+        padding: 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        background: #4caf50;
+        color: white;
+        font-weight: bold;
+        font-size: 18px;
+        transition: background 0.3s;
+      }
+
+      .event-actions button:hover {
+        background: #66bb6a;
+      }
+
+      .event-actions button:last-child {
+        background: #ff2600;
+      }
+
+      .event-actions button:last-child:hover {
+        background: #ff4d32;
+      }
+
+      .worked-out {
+        background-color: #4caf50;
+      }
+
+      .skipped {
+        background-color: #f44336;
       }
     </style>
   </head>
@@ -38,196 +326,303 @@
     <header>
       <h1>PUMPlanner</h1>
     </header>
+
     <script>
       if (!sessionStorage.getItem("loggedIn")) {
         window.location.href = "login.html";
       }
-</script>
-    <div class="calendar"></div>
-  </body>
-</html>
+    </script>
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0" />
-    <title>Dynamic Calendar</title>
-    <style>
-      body {
-        font-family:
-          "Montserrat", sans-serif; /* Switching to Montserrat for a bold, modern feel */
-        background-color: #1a1a1a; /* A deep gray for a strong, bold look */
-        color: #f0f0f0; /* Soft white for text, ensuring good contrast and readability */
-      }
-      table {
-        width: 90%; /* Making the table wider to use more space */
-        margin: 20px auto;
-        background-color: #262626; /* Slightly lighter gray for the table to differentiate from the body background */
-        border-collapse: collapse;
-        text-align: center;
-      }
-      th,
-      td {
-        padding: 20px; /* Larger padding for a more substantial look */
-        border: 1px solid #333; /* Darker borders for better definition */
-      }
-      th {
-        background-color: #333; /* Dark gray for headers to stand out */
-        color: #f0f0f0; /* Maintaining soft white for contrast */
-      }
-      .highlight {
-        background-color: #4caf50; /* Vibrant green for highlights, adding energy */
-        color: white;
-    }
-  .icon-bar {
-    background: linear-gradient(145deg, #4a4a4a, #2c2c2c); /* Stylish gradient from darker to lighter gray */
-    padding: 15px 0; /* Increased padding for better visual spacing */
-    margin-top: auto;
-    width: 100%;
-    box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.6); /* Enhanced shadow for more depth */
-    border-radius: 20px 20px 0 0; /* Softer rounded corners at the top */
-    display: flex;
-    justify-content: center; /* Ensures icons are centered */
-    align-items: center; /* Aligns icons vertically */
-  }
-      
-      .icons {
-        margin-top: auto;
-        text-align: center;
-        font-size: 40px; /* Increased font size */
-      }
-      .icon {
-        padding: 10px;
-        color: #f0f0f0; /* Soft white to match text color */
-        cursor: pointer; /* Indicates that the icons are interactive */
-      }
-      footer {
-        padding: 20px;
-        text-align: center;
-        background-color: #1a1a1a;
-        color: #f0f0f0;
-        margin-top: 20px; /* Added margin to ensure spacing between icons and footer */
-      }
-    </style>
-  </head>
-  <body>
-    <h2
-      style="text-align: center; color: orange"
-      id="monthYear"></h2>
-    <table id="calendar">
-      <thead>
-        <tr>
-          <th>Sun</th>
-          <th>Mon</th>
-          <th>Tue</th>
-          <th>Wed</th>
-          <th>Thu</th>
-          <th>Fri</th>
-          <th>Sat</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Rows and columns will be added here dynamically -->
-      </tbody>
-    </table>
+    <div class="calendar-container" id="calendar-container">
+      <div class="calendar">
+        <div class="front">
+          <div class="month-navigation">
+            <button
+              class="nav-button"
+              onclick="changeMonth(-1)">
+              &lt; Previous
+            </button>
+            <h2 id="current-month-year"></h2>
+            <button class="nav-button" onclick="changeMonth(1)">
+              Next &gt;
+            </button>
+          </div>
+
+          <div class="week-days">
+            <span>MON</span>
+            <span>TUE</span>
+            <span>WED</span>
+            <span>THU</span>
+            <span>FRI</span>
+            <span>SAT</span>
+            <span>SUN</span>
+          </div>
+
+          <div class="weeks" id="calendar-weeks"></div>
+        </div>
+
+        <!-- Back section for the event form -->
+        <div class="back">
+          <div class="event-info">
+            <!-- Title Input -->
+            <div class="workout-title-container">
+              <input
+                type="text"
+                id="workout-title"
+                placeholder="What did you hit today?" />
+            </div>
+            <div class="attendance-check">
+              <label>
+                <input type="checkbox" id="workout-checkbox" />
+                Did you work out today?
+              </label>
+            </div>
+            <div class="workout-log">
+              <!-- Workout log entries will be dynamically inserted here -->
+            </div>
+          </div>
+          <div class="event-actions">
+            <button onclick="saveWorkout()">Save</button>
+            <button onclick="closeEventForm()">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <script>
-      function createCalendar(year, month) {
-        const monthYearHeader =
-          document.getElementById("monthYear");
-        const calendar = document
-          .getElementById("calendar")
-          .getElementsByTagName("tbody")[0];
+      let currentDate = new Date();
+      let workoutData = {};
+      let currentSelectedDate = null;
 
-        // Clear previous calendar rows
-        calendar.innerHTML = "";
+      function generateCalendar() {
+        const calendarWeeks =
+          document.getElementById("calendar-weeks");
+        const monthYearElement = document.getElementById(
+          "current-month-year"
+        );
 
-        // Days of the week (0 = Sunday, 1 = Monday, ... 6 = Saturday)
-        const dayOfWeek = new Date(year, month).getDay();
+        calendarWeeks.innerHTML = "";
+        monthYearElement.textContent =
+          currentDate.toLocaleDateString("en-US", {
+            month: "long",
+            year: "numeric"
+          });
 
-        // Getting the number of days in the month
-        const daysInMonth = new Date(
-          year,
-          month + 1,
-          0
-        ).getDate();
+        const year = currentDate.getFullYear();
+        const month = currentDate.getMonth();
+        const firstDay = new Date(year, month, 1);
+        const lastDay = new Date(year, month + 1, 0);
 
-        // Fill month and year
-        const monthNames = [
-          "January",
-          "February",
-          "March",
-          "April",
-          "May",
-          "June",
-          "July",
-          "August",
-          "September",
-          "October",
-          "November",
-          "December"
-        ];
-        monthYearHeader.textContent = `${monthNames[month]} ${year}`;
+        let startDay = firstDay.getDay();
+        startDay = startDay === 0 ? 6 : startDay - 1;
 
-        // Creating all cells
-        let date = 1;
-        for (let i = 0; i < 6; i++) {
-          // the calendar has at max 6 rows
-          let row = document.createElement("tr");
+        let date = new Date(year, month, 1);
+        date.setDate(date.getDate() - startDay);
 
-          for (let j = 0; j < 7; j++) {
-            if (i === 0 && j < dayOfWeek) {
-              let cell = document.createElement("td");
-              let cellText = document.createTextNode("");
-              cell.appendChild(cellText);
-              row.appendChild(cell);
-            } else if (date > daysInMonth) {
-              break; 
+        for (let week = 0; week < 6; week++) {
+          const weekDiv = document.createElement("div");
+          weekDiv.className = "week-row";
+
+          for (let day = 0; day < 7; day++) {
+            const daySpan = document.createElement("span");
+            daySpan.className = "calendar-day";
+
+            const dateStr = date.toISOString().split("T")[0];
+            daySpan.setAttribute("data-date", dateStr);
+
+            if (date.getMonth() !== month) {
+              daySpan.textContent = date.getDate();
+              daySpan.classList.add("last-month");
             } else {
-              let cell = document.createElement("td");
-              let cellText = document.createTextNode(date);
+              daySpan.textContent = date.getDate();
               if (
-                date === new Date().getDate() &&
-                year === new Date().getFullYear() &&
-                month === new Date().getMonth()
+                date.toDateString() ===
+                new Date().toDateString()
               ) {
-                cell.classList.add("highlight"); // Highlight the current day
+                daySpan.classList.add("active");
               }
-              cell.appendChild(cellText);
-              row.appendChild(cell);
-              date++;
             }
+
+            if (workoutData[dateStr]) {
+              daySpan.classList.add(
+                workoutData[dateStr].workedOut
+                  ? "worked-out"
+                  : "skipped"
+              );
+            }
+
+            const dayDate = new Date(date);
+            daySpan.addEventListener("click", () =>
+              showEventForm(dayDate)
+            );
+            weekDiv.appendChild(daySpan);
+
+            date.setDate(date.getDate() + 1);
           }
-          calendar.appendChild(row); // appending each row into calendar body
+
+          calendarWeeks.appendChild(weekDiv);
         }
       }
 
-      // Initial call
-      createCalendar(
-        new Date().getFullYear(),
-        new Date().getMonth()
-      );
-    </script>
-  </body>
-  <div class="icon-bar">
-    <div class="icons">
-        <a href="pages/tracking.html" class="icon">
-            <i class="fa fa-chart-line" title="Tracking"></i>
-        </a>
+      function changeMonth(offset) {
+        currentDate.setMonth(currentDate.getMonth() + offset);
+        generateCalendar();
+      }
 
+      function showEventForm(date) {
+        currentSelectedDate = date.toISOString().split("T")[0];
+        document
+          .querySelector(".calendar")
+          .classList.add("flip");
+        // Add a class to the container so it fills the viewport during the flip
+        document
+          .getElementById("calendar-container")
+          .classList.add("flip-active");
+        // Hide icon bar and footer when showing event form
+        document.querySelector(".icon-bar").style.display =
+          "none";
+
+        const workoutCheckbox = document.getElementById(
+          "workout-checkbox"
+        );
+        const workoutLog =
+          document.querySelector(".workout-log");
+        const workoutTitle =
+          document.getElementById("workout-title");
+
+        workoutCheckbox.checked = false;
+        workoutTitle.value = "";
+        workoutLog.innerHTML = "";
+
+        if (workoutData[currentSelectedDate]) {
+          workoutTitle.value =
+            workoutData[currentSelectedDate].title || "";
+          workoutCheckbox.checked =
+            workoutData[currentSelectedDate].workedOut;
+          workoutData[currentSelectedDate].exercises.forEach(
+            (ex) => {
+              addExerciseField(ex.exercise, ex.weight);
+            }
+          );
+
+          const addButton = document.createElement("button");
+          addButton.className = "add-exercise";
+          addButton.onclick = () => addExerciseField();
+          addButton.innerHTML =
+            '<i class="fas fa-plus"></i> Add Exercise';
+          workoutLog.appendChild(addButton);
+        } else {
+          workoutLog.innerHTML = `
+            <div class="exercise-entry">
+              <input type="text" class="event-input exercise-input" placeholder="Exercise?">
+              <input type="number" class="event-input weight-input" placeholder="Weight">
+            </div>
+            <button class="add-exercise" onclick="addExerciseField()">
+              <i class="fas fa-plus"></i> Add Exercise
+            </button>
+          `;
+        }
+      }
+
+      function addExerciseField(exercise = "", weight = "") {
+        const entry = document.createElement("div");
+        entry.className = "exercise-entry";
+        entry.innerHTML = `
+          <input type="text" class="event-input exercise-input" placeholder="Exercise" value="${exercise}">
+          <input type="number" class="event-input weight-input" placeholder="Weight (kg)" value="${weight}">
+        `;
+        const workoutLog =
+          document.querySelector(".workout-log");
+        const addButton =
+          workoutLog.querySelector(".add-exercise");
+        if (addButton) {
+          workoutLog.insertBefore(entry, addButton);
+        } else {
+          workoutLog.appendChild(entry);
+        }
+      }
+
+      function saveWorkout() {
+        const workoutTitle =
+          document.getElementById("workout-title").value;
+        const workedOut = document.getElementById(
+          "workout-checkbox"
+        ).checked;
+        const exercises = [];
+
+        document
+          .querySelectorAll(".exercise-entry")
+          .forEach((entry) => {
+            const exercise = entry.querySelector(
+              ".exercise-input"
+            ).value;
+            const weight =
+              entry.querySelector(".weight-input").value;
+            if (exercise) {
+              exercises.push({ exercise, weight });
+            }
+          });
+
+        workoutData[currentSelectedDate] = {
+          title: workoutTitle,
+          workedOut,
+          exercises
+        };
+
+        updateCalendarDayColor();
+        closeEventForm();
+      }
+
+      function updateCalendarDayColor() {
+        const allDays =
+          document.querySelectorAll(".calendar-day");
+        allDays.forEach((day) => {
+          const dayStr = day.getAttribute("data-date");
+          day.classList.remove("worked-out", "skipped");
+          if (workoutData[dayStr]) {
+            day.classList.add(
+              workoutData[dayStr].workedOut
+                ? "worked-out"
+                : "skipped"
+            );
+          }
+        });
+      }
+
+      function closeEventForm() {
+        document
+          .querySelector(".calendar")
+          .classList.remove("flip");
+        // Remove the extra height class when closing the form
+        document
+          .getElementById("calendar-container")
+          .classList.remove("flip-active");
+        // Show icon bar and footer again
+        document.querySelector(".icon-bar").style.display =
+          "block";
+        document.querySelector("footer").style.display =
+          "block";
+        generateCalendar();
+      }
+
+      generateCalendar();
+    </script>
+
+    <div class="icon-bar">
+      <div class="icons">
+        <a href="pages/tracking.html" class="icon">
+          <i class="fa fa-chart-line" title="Tracking"></i>
+        </a>
         <a href="pages/exercise.html" class="icon">
-            <i class="fa fa-dumbbell" title="Exercise Page"></i>
+          <i class="fa fa-dumbbell" title="Exercise Page"></i>
         </a>
-        <!-- Link to the Settings page -->
         <a href="pages/settings.html" class="icon">
-            <i class="fa fa-cog" title="Settings"></i>
+          <i class="fa fa-cog" title="Settings"></i>
         </a>
+      </div>
     </div>
-</div> 
-<footer>
-    <p>&copy; 2025 PumpPlanner. All rights reserved.</p>
-</footer>
+    <footer>
+      <p>&copy; 2025 PumpPlanner. All rights reserved.</p>
+    </footer>
+  </body>
 </html>
