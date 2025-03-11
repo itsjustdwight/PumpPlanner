@@ -1,33 +1,47 @@
-import { fetchExercises } from "./fetchExercises.js";
+import mongoose from "mongoose";
+import fs from "fs";
 import { Exercise } from "./db.js";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 async function saveExercisesToDB() {
-  let exercises = [];
-  let attempts = 0;
-  const maxRetries = 3; // Retry up to 3 times
-
-  while (exercises.length === 0 && attempts < maxRetries) {
-    attempts++;
-    console.log(`Attempt ${attempts}: Fetching exercises...`);
-    
-    exercises = await fetchExercises();
-
-    if (exercises.length === 0) {
-      console.log(`Waiting before retrying (attempt ${attempts})...`);
-      await new Promise(resolve => setTimeout(resolve, 5000)); // Wait 5 seconds before retrying
-    }
-  }
-
-  if (exercises.length === 0) {
-    console.log("No exercises found after multiple attempts. Exiting...");
-    return;
-  }
-
   try {
-    await Exercise.insertMany(exercises);
-    console.log(`Successfully saved ${exercises.length} exercises to MongoDB.`);
+    console.log("🔄 Reading exercises from exercises.json...");
+
+    const data = fs.readFileSync("exercises.json", "utf8");
+    const exercises = JSON.parse(data);
+
+    if (!exercises || exercises.length === 0) {
+      console.error("❌ No exercises found in JSON file.");
+      return;
+    }
+
+    console.log(`✅ Found ${exercises.length} exercises. Connecting to MongoDB...`);
+
+    console.log(`🔍 Checking MONGO_CONNECTION_STRING: ${process.env.MONGO_CONNECTION_STRING}`); // Debugging log
+    
+    // ✅ Explicitly pass database name in connection string
+    const conn = await mongoose.connect(process.env.MONGO_CONNECTION_STRING, {
+      dbName: "pumpplannerdb",
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+
+    const db = mongoose.connection;
+    console.log(`✅ Connected to database: ${db.name}`);
+
+    await Exercise.deleteMany({});
+    console.log("✅ Old exercises removed. Inserting new exercises...");
+
+    const result = await Exercise.insertMany(exercises);
+    console.log(`✅ Successfully inserted ${result.length} exercises!`);
+
   } catch (error) {
-    console.error("Error saving exercises to database:", error.message);
+    console.error("❌ Error saving exercises to database:", error);
+  } finally {
+    await mongoose.connection.close();
+    console.log("MongoDB Connection Closed.")
   }
 }
 

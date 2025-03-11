@@ -1,31 +1,38 @@
 import axios from "axios";
+import fs from "fs";
 import dotenv from "dotenv";
 
 dotenv.config(); // ✅ Load environment variables
 
-const API_URL = "https://exercisedb.p.rapidapi.com/exercises";
-const API_KEY = process.env.EXERCISE_API_KEY; // ✅ Use API Key
+const API_URL = "https://api.api-ninjas.com/v1/exercises";
+const API_KEY = process.env.NINJAS_API_KEY; // Make sure to set this in your .env file
 
 console.log("Using API Key:", API_KEY); // Debugging line
 
-export async function fetchExercises() {
+async function fetchExercises() {
   try {
-    if (!API_KEY) {
-      throw new Error("API key is missing. Check your .env file.");
-    }
+    console.log(`🔄 Fetching exercises from API Ninjas...`);
 
     const response = await axios.get(API_URL, {
-      headers: {
-        "X-RapidAPI-Key": API_KEY, // ✅ Ensure the API key is sent
-        "X-RapidAPI-Host": "exercisedb.p.rapidapi.com",
-      },
-      params: { limit: 10 },
+      headers: { "X-Api-Key": API_KEY },
     });
 
-    console.log(`Successfully fetched ${response.data.length} exercises.`);
-    return response.data;
+    const exercises = response.data;
+
+    if (!exercises || exercises.length === 0) {
+      console.error("❌ No exercises returned from API.");
+      return;
+    }
+
+    console.log(`✅ Successfully fetched ${exercises.length} exercises! Saving to file...`);
+
+    fs.writeFileSync("exercises.json", JSON.stringify(exercises, null, 2));
+
+    console.log("✅ Exercises saved to exercises.json!");
+
   } catch (error) {
-    console.error("Error obtaining exercise:", error.response?.data || error.message);
-    return [];
+    console.error("❌ Error fetching exercises:", error);
   }
 }
+
+export default fetchExercises();
