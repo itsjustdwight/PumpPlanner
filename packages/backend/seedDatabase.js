@@ -28,8 +28,8 @@ async function saveExercisesToDB() {
       useUnifiedTopology: true,
     });
 
-    const db = mongoose.connection;
-    console.log(`✅ Connected to database: ${db.name}`);
+    
+    console.log(`✅ Connected to database: ${conn.connection.name}`);
 
     await Exercise.deleteMany({});
     console.log("✅ Old exercises removed. Inserting new exercises...");

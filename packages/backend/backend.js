@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import mongoose from "mongoose"
 import exerciseRoutes from "./exerciseRoutes.js";
 import { Exercise } from "./db.js";
+import { Users } from "./db.js";
 
 dotenv.config();
 

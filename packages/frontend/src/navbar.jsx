@@ -1,5 +1,16 @@
-import { Link } from 'react-router-dom'
+import React from "react"; 
+import { Link } from "react-router-dom";
 
-<li>
-<Link to="/Dashboard"> Dashboard </Link>
-</li>
+function Navbar() {
+  return (
+    <nav>
+      <ul>
+        <li>
+          <Link to="/Dashboard"> Dashboard </Link>
+        </li>
+      </ul>
+    </nav>
+  );
+}
+
+export default Navbar;

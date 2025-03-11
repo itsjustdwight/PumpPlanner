@@ -10,14 +10,14 @@ export default [
     files: ["**/*.{js,jsx}"],
     languageOptions: {
       ecmaVersion: 2020,
-      globals: globals.browser,
+      globals: { ...globals.browser, ...globals.node }, // ✅ FIXES 'process' is not defined
       parserOptions: {
         ecmaVersion: "latest",
         ecmaFeatures: { jsx: true },
         sourceType: "module"
       }
     },
-    settings: { react: { version: "18.3" } },
+    settings: { react: { version: "detect" } }, // Auto-detects React version
     plugins: {
       react,
       "react-hooks": reactHooks,
