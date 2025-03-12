@@ -18,22 +18,46 @@
       }
 
       body {
-        font-family: "Anton", sans-serif;
-        color: #f0f0f0; /* Changed to soft white for better visibility against dark backgrounds */
-        background: url("background.jpg") no-repeat center
-          center fixed;
-        background-size: cover;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        margin: 0;
-      }
+            font-family: "Montserrat", sans-serif;
+            color: #f0f0f0;
+            background: url("background.jpg") no-repeat center center fixed;
+            background-size: cover;
+            transition: background 0.3s, color 0.3s;
+        }
 
-      header {
-        text-align: center;
-        padding: 20px 5%;
-        background-color: #1a1a1a;
+        body.light-mode {
+            background-color: #ffffff !important;
+            color: #000 !important;
+            background: none;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px 10%;
+            background-color: #1a1a1a;
+        }
+
+      h1 {
+        font-size: 48px; /* Larger font size for emphasis */
+        color: #ff2600; /* Vibrant tomato red, adds energy and is visually striking */
+        text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8); /* Subtle shadow to make the text pop out more */
+        margin: 0;
+        padding: 20px 0; /* Adding vertical padding to give more space around the text */
       }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>PUMPlanner</h1>
+    </header>
+    <script>
+      if (!sessionStorage.getItem("loggedIn")) {
+        window.location.href = "login.html";
+      }
+</script>
+    <div class="calendar"></div>
+  </body>
+</html>
 
       h1 {
         font-size: 48px;
@@ -81,6 +105,7 @@
         background: #ff2600;
         border: none;
         color: white;
+<<<<<<< HEAD
         padding: 16px 30px;
         border-radius: 6px;
         cursor: pointer;
@@ -151,6 +176,20 @@
         width: 100%;
         box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.6);
       }
+=======
+    }
+  .icon-bar {
+    background: linear-gradient(145deg, #4a4a4a, #2c2c2c); /* Stylish gradient from darker to lighter gray */
+    padding: 15px 0; /* Increased padding for better visual spacing */
+    margin-top: auto;
+    width: 100%;
+    box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.6); /* Enhanced shadow for more depth */
+    border-radius: 20px 20px 0 0; /* Softer rounded corners at the top */
+    display: flex;
+    justify-content: center; /* Ensures icons are centered */
+    align-items: center; /* Aligns icons vertically */
+  }
+>>>>>>> origin/settings
 
       .icons {
         display: flex;
@@ -394,6 +433,7 @@
       let workoutData = {};
       let currentSelectedDate = null;
 
+<<<<<<< HEAD
       function generateCalendar() {
         const calendarWeeks =
           document.getElementById("calendar-weeks");
@@ -433,6 +473,16 @@
             if (date.getMonth() !== month) {
               daySpan.textContent = date.getDate();
               daySpan.classList.add("last-month");
+=======
+          for (let j = 0; j < 7; j++) {
+            if (i === 0 && j < dayOfWeek) {
+              let cell = document.createElement("td");
+              let cellText = document.createTextNode("");
+              cell.appendChild(cellText);
+              row.appendChild(cell);
+            } else if (date > daysInMonth) {
+              break;
+>>>>>>> origin/settings
             } else {
               daySpan.textContent = date.getDate();
               if (
@@ -616,13 +666,26 @@
         <a href="pages/exercise.html" class="icon">
           <i class="fa fa-dumbbell" title="Exercise Page"></i>
         </a>
+<<<<<<< HEAD
         <a href="pages/settings.html" class="icon">
           <i class="fa fa-cog" title="Settings"></i>
+=======
+        <!-- Link to the Settings page -->
+        <a href="settings.html" class="icon">
+            <i class="fa fa-cog" title="Settings"></i>
+>>>>>>> origin/settings
         </a>
       </div>
     </div>
+<<<<<<< HEAD
     <footer>
       <p>&copy; 2025 PumpPlanner. All rights reserved.</p>
     </footer>
   </body>
+=======
+</div>
+<footer>
+    <p>&copy; 2025 PumpPlanner. All rights reserved.</p>
+</footer>
+>>>>>>> origin/settings
 </html>
