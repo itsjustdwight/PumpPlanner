@@ -105,78 +105,6 @@
         background: #ff2600;
         border: none;
         color: white;
-<<<<<<< HEAD
-        padding: 16px 30px;
-        border-radius: 6px;
-        cursor: pointer;
-        font-size: 20px;
-        transition: background 0.3s;
-      }
-
-      .nav-button:hover {
-        background: #ff4d32;
-      }
-
-      #current-month-year {
-        font-size: 32px;
-        color: #f0f0f0;
-        text-transform: uppercase;
-      }
-
-      .week-days {
-        display: flex;
-        justify-content: space-between;
-        padding: 15px 20px;
-        background-color: #333;
-        font-size: 20px;
-      }
-
-      .weeks {
-        padding: 15px 20px;
-      }
-
-      .week-row {
-        display: flex;
-        justify-content: space-evenly;
-        margin: 12px 0;
-        gap: 2px;
-      }
-
-      .calendar-day {
-        width: 90px;
-        height: 90px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        font-size: 22px;
-        flex: 1;
-        max-width: 14%;
-        border-radius: 10px;
-        transition: all 0.2s;
-      }
-
-      .calendar-day:hover {
-        background-color: #333;
-      }
-
-      .calendar-day.active {
-        background-color: #ffea00;
-        color: white;
-        transform: scale(1.1);
-      }
-
-      .calendar-day.last-month {
-        opacity: 0.3;
-      }
-
-      .icon-bar {
-        background: linear-gradient(145deg, #4a4a4a, #2c2c2c);
-        padding: 20px 0;
-        width: 100%;
-        box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.6);
-      }
-=======
     }
   .icon-bar {
     background: linear-gradient(145deg, #4a4a4a, #2c2c2c); /* Stylish gradient from darker to lighter gray */
@@ -189,7 +117,6 @@
     justify-content: center; /* Ensures icons are centered */
     align-items: center; /* Aligns icons vertically */
   }
->>>>>>> origin/settings
 
       .icons {
         display: flex;
@@ -433,47 +360,6 @@
       let workoutData = {};
       let currentSelectedDate = null;
 
-<<<<<<< HEAD
-      function generateCalendar() {
-        const calendarWeeks =
-          document.getElementById("calendar-weeks");
-        const monthYearElement = document.getElementById(
-          "current-month-year"
-        );
-
-        calendarWeeks.innerHTML = "";
-        monthYearElement.textContent =
-          currentDate.toLocaleDateString("en-US", {
-            month: "long",
-            year: "numeric"
-          });
-
-        const year = currentDate.getFullYear();
-        const month = currentDate.getMonth();
-        const firstDay = new Date(year, month, 1);
-        const lastDay = new Date(year, month + 1, 0);
-
-        let startDay = firstDay.getDay();
-        startDay = startDay === 0 ? 6 : startDay - 1;
-
-        let date = new Date(year, month, 1);
-        date.setDate(date.getDate() - startDay);
-
-        for (let week = 0; week < 6; week++) {
-          const weekDiv = document.createElement("div");
-          weekDiv.className = "week-row";
-
-          for (let day = 0; day < 7; day++) {
-            const daySpan = document.createElement("span");
-            daySpan.className = "calendar-day";
-
-            const dateStr = date.toISOString().split("T")[0];
-            daySpan.setAttribute("data-date", dateStr);
-
-            if (date.getMonth() !== month) {
-              daySpan.textContent = date.getDate();
-              daySpan.classList.add("last-month");
-=======
           for (let j = 0; j < 7; j++) {
             if (i === 0 && j < dayOfWeek) {
               let cell = document.createElement("td");
@@ -482,7 +368,6 @@
               row.appendChild(cell);
             } else if (date > daysInMonth) {
               break;
->>>>>>> origin/settings
             } else {
               daySpan.textContent = date.getDate();
               if (
@@ -511,8 +396,6 @@
           }
 
           calendarWeeks.appendChild(weekDiv);
-        }
-      }
 
       function changeMonth(offset) {
         currentDate.setMonth(currentDate.getMonth() + offset);
@@ -666,26 +549,14 @@
         <a href="pages/exercise.html" class="icon">
           <i class="fa fa-dumbbell" title="Exercise Page"></i>
         </a>
-<<<<<<< HEAD
-        <a href="pages/settings.html" class="icon">
-          <i class="fa fa-cog" title="Settings"></i>
-=======
         <!-- Link to the Settings page -->
         <a href="settings.html" class="icon">
             <i class="fa fa-cog" title="Settings"></i>
->>>>>>> origin/settings
         </a>
       </div>
     </div>
-<<<<<<< HEAD
-    <footer>
-      <p>&copy; 2025 PumpPlanner. All rights reserved.</p>
-    </footer>
-  </body>
-=======
 </div>
 <footer>
     <p>&copy; 2025 PumpPlanner. All rights reserved.</p>
 </footer>
->>>>>>> origin/settings
 </html>
