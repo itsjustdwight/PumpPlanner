@@ -1,13 +1,14 @@
 <!doctype html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0" />
     <title>Login | PumpPlanner</title>
     <link
-        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap"
-        rel="stylesheet"
-    />
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap"
+      rel="stylesheet" />
     <style>
       body {
         font-family: "Montserrat", sans-serif;
@@ -76,47 +77,82 @@
         text-decoration: underline;
       }
     </style>
-</head>
-<body>
-<div class="login-container">
-    <h1>PumpPlanner</h1>
-    <h2>Login</h2>
-    <form onsubmit="handleLogin(event)">
+  </head>
+  <body>
+    <div class="login-container">
+      <h1>PumpPlanner</h1>
+      <h2>Login</h2>
+      <form onsubmit="handleLogin(event)">
         <input
-                type="text"
-                placeholder="Username"
-                id="username"
-                required
-        />
+          type="text"
+          placeholder="Username"
+          id="username"
+          required />
         <input
-                type="password"
-                placeholder="Password"
-                id="password"
-                required
-        />
+          type="password"
+          placeholder="Password"
+          id="password"
+          required />
         <button type="submit">Submit</button>
-    </form>
-    <p class="signup-link">New to PumpPlanner? <a href="signup.html">Sign up here</a></p>
-</div>
+      </form>
+      <p class="signup-link">
+        New to PumpPlanner?
+        <a href="signup.html">Sign up here</a>
+      </p>
+    </div>
 
-<script>
-      function handleLogin(event) {
+    <script>
+      async function handleLogin(event) {
         event.preventDefault();
-        const username = document.getElementById("username").value;
-        const password = document.getElementById("password").value;
 
-        const storedEmail = localStorage.getItem("userEmail");
-        const storedPassword = localStorage.getItem("userPassword");
-        const firstName = localStorage.getItem("userFirstName");
+        const username =
+          document.getElementById("username").value;
+        const password =
+          document.getElementById("password").value;
 
-        if (username === storedEmail && password === storedPassword) {
-            alert(`Welcome back, ${firstName}!`);
-            sessionStorage.setItem("loggedIn", "true");
-            window.location.href = "index.html"; // Redirect to home page
-        } else {
-            alert("Invalid email or password. Please try again.");
+        try {
+          // Make a POST request to your Node/Express backend at /login
+          const response = await fetch(
+            "http://localhost:8000/login",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({
+                username,
+                pwd: password // The backend expects 'pwd' as the password field
+              })
+            }
+          );
+
+          if (!response.ok) {
+            // If the response status is 401, 400, 500, etc.
+            const errorText = await response.text();
+            throw new Error(errorText || "Login failed");
+          }
+
+          // If successful, parse the JSON response
+          const data = await response.json();
+          // The backend might return { token: "...", message: "...", etc. }
+          console.log("Login success:", data);
+
+          // For demonstration, let's assume 'data.token' is the JWT
+          // You can store it in sessionStorage or localStorage
+          // Example:
+          sessionStorage.setItem("loggedIn", data.token);
+
+          alert(`Welcome back, ${username}!`);
+
+          // Optionally redirect the user to some other page
+          window.location.href = "index.html";
+        } catch (err) {
+          console.error("Login error:", err);
+          alert(
+            "Invalid username or password. Please try again."
+          );
         }
       }
-</script>
-</body>
+    </script>
+  </body>
 </html>
