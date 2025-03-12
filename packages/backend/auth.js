@@ -1,4 +1,3 @@
-// auth.js
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { User } from "./db.js";
@@ -64,7 +63,7 @@ export async function registerUser(req, res) {
 /**
  * Logs in an existing user.
  * Expects: { username, pwd }
- * Returns: { token }
+ * Returns: { message, token }
  */
 export async function loginUser(req, res) {
   try {
@@ -89,8 +88,11 @@ export async function loginUser(req, res) {
     // 3) Generate token
     const token = await generateAccessToken({ userId: foundUser._id });
 
-    // 4) Return success
-    res.status(200).json({ token });
+    // 4) Return success with JSON
+    res.status(200).json({
+      message: "Login successful",
+      token
+    });
   } catch (error) {
     console.error("Error logging in user:", error);
     res.status(500).send("Internal Server Error");

@@ -1,3 +1,4 @@
+<!-- settings.html -->
 <!doctype html>
 <html lang="en">
   <head>
@@ -36,8 +37,9 @@
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
       }
 
-      .settings-container h1 {
-        color: #ff2600;
+      .settings-container {
+        margin: 50px auto; /* or any spacing you like */
+        width: 300px;
       }
 
       input,
@@ -171,8 +173,25 @@
       }
 
       function goHome() {
-        window.location.href = "index.html";
+        window.location.href = "../index.html";
       }
     </script>
+    <div class="icon-bar">
+      <div class="icons">
+        <a href="tracking.html" class="icon">
+          <i class="fa fa-chart-line" title="Tracking"></i>
+        </a>
+        <a href="exercise.html" class="icon">
+          <i class="fa fa-dumbbell" title="Exercise Page"></i>
+        </a>
+        <a href="settings.html" class="icon">
+          <i class="fa fa-cog" title="Settings"></i>
+        </a>
+      </div>
+    </div>
+
+    <footer>
+      <p>&copy; 2025 PumpPlanner. All rights reserved.</p>
+    </footer>
   </body>
 </html>

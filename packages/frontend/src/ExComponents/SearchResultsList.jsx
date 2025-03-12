@@ -1,5 +1,7 @@
+import React from "react";
 import "./SearchResultsList.css";
 import { SearchResult } from "./SearchResult";
+import PropTypes from "prop-types";
 
 export const SearchResultsList = ({ results }) => {
   return (
@@ -9,4 +11,12 @@ export const SearchResultsList = ({ results }) => {
       })}
     </div>
   );
+};
+
+SearchResultsList.propTypes = {
+  results: PropTypes.arrayOf(
+    PropTypes.shape({
+      // ...
+    })
+  )
 };
