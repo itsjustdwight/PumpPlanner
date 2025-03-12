@@ -7,8 +7,7 @@ export const SearchBar = ({ setResults }) => {
   const [input, setInput] = useState("");
 
   const fetchData = (value) => {
-    /*placeholder code for our BE DB*/
-    fetch("https://jsonplaceholder.typicode.com/users") 
+    fetch("https://jsonplaceholder.typicode.com/users")
       .then((response) => response.json())
       .then((json) => {
         const results = json.filter((user) => {
@@ -32,7 +31,7 @@ export const SearchBar = ({ setResults }) => {
     <div className="input-wrapper">
       <FaSearch id="search-icon" />
       <input
-        placeholder="Search for an exercise"
+        placeholder="Search for exercise"
         value={input}
         onChange={(e) => handleChange(e.target.value)}
       />
