@@ -14,17 +14,25 @@
       rel="stylesheet" />
     <style>
       body {
-        font-family: "Montserrat", sans-serif;
-        color: #f0f0f0; /* Changed to soft white for better visibility against dark backgrounds */
-        background: url("background.jpg") no-repeat center
-          center fixed;
-        background-size: cover;
-      }
-      header {
-        text-align: center;
-        padding: 20px 10%;
-        background-color: #1a1a1a; /* Semi-transparent black background for better readability */
-      }
+            font-family: "Montserrat", sans-serif;
+            color: #f0f0f0;
+            background: url("background.jpg") no-repeat center center fixed;
+            background-size: cover;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        body.light-mode {
+            background-color: #ffffff !important;
+            color: #000 !important;
+            background: none;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px 10%;
+            background-color: #1a1a1a;
+        }
+
       h1 {
         font-size: 48px; /* Larger font size for emphasis */
         color: #ff2600; /* Vibrant tomato red, adds energy and is visually striking */
@@ -93,7 +101,7 @@
     justify-content: center; /* Ensures icons are centered */
     align-items: center; /* Aligns icons vertically */
   }
-      
+
       .icons {
         margin-top: auto;
         text-align: center;
@@ -185,7 +193,7 @@
               cell.appendChild(cellText);
               row.appendChild(cell);
             } else if (date > daysInMonth) {
-              break; 
+              break;
             } else {
               let cell = document.createElement("td");
               let cellText = document.createTextNode(date);
@@ -222,11 +230,11 @@
             <i class="fa fa-dumbbell" title="Exercise Page"></i>
         </a>
         <!-- Link to the Settings page -->
-        <a href="pages/settings.html" class="icon">
+        <a href="settings.html" class="icon">
             <i class="fa fa-cog" title="Settings"></i>
         </a>
     </div>
-</div> 
+</div>
 <footer>
     <p>&copy; 2025 PumpPlanner. All rights reserved.</p>
 </footer>
