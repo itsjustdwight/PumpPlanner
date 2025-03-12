@@ -45,7 +45,7 @@ app.post("/login", loginUser);
 
 app.post("/users", authenticateUser, (req, res) => {
   const userToAdd = req.body;
-  Users.addUser(userToAdd).then((result) =>
+  User.addUser(userToAdd).then((result) =>
     res.status(201).send(result)
   );
 });
