@@ -12,13 +12,23 @@
     <link
       href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap"
       rel="stylesheet" />
+    <link
+      rel="preconnect"
+      href="https://fonts.googleapis.com" />
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anton&family=Anton+SC&display=swap"
+      rel="stylesheet" />
     <style>
       * {
         box-sizing: border-box;
       }
 
       body {
-        font-family: "Montserrat", sans-serif;
+        font-family: "Anton", sans-serif;
         color: #f0f0f0;
         background: url("background.jpg") no-repeat center
           center fixed;
@@ -200,7 +210,7 @@
       }
 
       #workout-title {
-        font-family: "Montserrat", sans-serif;
+        font-family: "Anton", sans-serif;
         font-size: 32px;
         padding: 15px;
         width: 100%;
@@ -220,6 +230,7 @@
       }
 
       .attendance-check label {
+        justify-content: center;
         display: flex;
         align-items: center;
         gap: 10px;
@@ -238,12 +249,16 @@
       }
 
       .exercise-entry {
+        padding: 20px;
         display: flex;
-        gap: 10px;
+        align-items: center;
+        gap: 10px; /* space between items */
+        margin-bottom: 10px;
       }
 
-      .exercise-input,
+      select.exercise-select,
       .weight-input {
+        font-family: "Anton", sans-serif;
         padding: 15px;
         border-radius: 6px;
         border: 1px solid #ccc;
@@ -254,32 +269,53 @@
           border 0.3s,
           box-shadow 0.3s;
         font-size: 20px;
+        width: 40%;
       }
 
-      .exercise-input:focus,
+      select.exercise-select:focus,
       .weight-input:focus {
         border-color: #ff2600;
         box-shadow: 0 0 5px rgba(255, 38, 0, 0.5);
       }
 
       .weight-input {
-        max-width: 120px;
+        max-width: 150px;
       }
 
       .add-exercise {
+        font-family: "Anton", sans-serif;
         background: #ff2600;
+        margin-left: 30px;
         border: none;
+        width: 20%;
         color: white;
-        padding: 12px 20px;
+        padding: 10px 15px;
         border-radius: 4px;
         cursor: pointer;
-        align-self: flex-start;
         transition: background 0.3s;
-        font-size: 20px;
+        font-size: 16px;
       }
 
       .add-exercise:hover {
         background: #ff4d32;
+      }
+
+      /* To distinguish or style them differently, you could do: */
+      .delete-exercise {
+        font-family: "Anton", sans-serif;
+        background: #444;
+        margin-right: 30px; /* pushes 'delete' to the far right if you like */
+        border: none;
+        width: 20%;
+        color: white;
+        padding: 10px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background 0.3s;
+        font-size: 16px;
+      }
+      .delete-exercise:hover {
+        background: #666;
       }
 
       .event-actions {
@@ -289,6 +325,7 @@
       }
 
       .event-actions button {
+        font-family: "Anton", sans-serif;
         flex: 1;
         padding: 15px;
         border: none;
@@ -327,6 +364,7 @@
       <h1>PUMPlanner</h1>
     </header>
 
+    <!-- If user is not logged in, redirect to login -->
     <script>
       if (!sessionStorage.getItem("loggedIn")) {
         window.location.href = "login.html";
@@ -335,16 +373,17 @@
 
     <div class="calendar-container" id="calendar-container">
       <div class="calendar">
+        <!-- FRONT SIDE: Calendar -->
         <div class="front">
           <div class="month-navigation">
             <button
               class="nav-button"
               onclick="changeMonth(-1)">
-              &lt; Previous
+              &lt;
             </button>
             <h2 id="current-month-year"></h2>
             <button class="nav-button" onclick="changeMonth(1)">
-              Next &gt;
+              &gt;
             </button>
           </div>
 
@@ -361,7 +400,7 @@
           <div class="weeks" id="calendar-weeks"></div>
         </div>
 
-        <!-- Back section for the event form -->
+        <!-- BACK SIDE: Event/Workout Form -->
         <div class="back">
           <div class="event-info">
             <!-- Title Input -->
@@ -378,7 +417,7 @@
               </label>
             </div>
             <div class="workout-log">
-              <!-- Workout log entries will be dynamically inserted here -->
+              <!-- We'll dynamically insert exercise fields here -->
             </div>
           </div>
           <div class="event-actions">
@@ -390,10 +429,33 @@
     </div>
 
     <script>
+      /*************************************************************
+       *  1) FETCH EXERCISES ON PAGE LOAD
+       *************************************************************/
+      let allExercises = []; // will store all exercises from backend
+      async function loadExercises() {
+        try {
+          // Change the URL if your backend is different:
+          const res = await fetch(
+            "http://localhost:8000/exercises"
+          );
+          if (!res.ok)
+            throw new Error("Failed to load exercises");
+          allExercises = await res.json();
+          console.log("Loaded exercises:", allExercises);
+        } catch (err) {
+          console.error("Error fetching exercises:", err);
+        }
+      }
+
+      /*************************************************************
+       *  2) CALENDAR & WORKOUT LOGIC
+       *************************************************************/
       let currentDate = new Date();
       let workoutData = {};
       let currentSelectedDate = null;
 
+      // Generate the calendar
       function generateCalendar() {
         const calendarWeeks =
           document.getElementById("calendar-weeks");
@@ -414,11 +476,14 @@
         const lastDay = new Date(year, month + 1, 0);
 
         let startDay = firstDay.getDay();
+        // Monday-based => shift day from [0..6] => [0..6], where 0 = Mon, 6=Sun
         startDay = startDay === 0 ? 6 : startDay - 1;
 
         let date = new Date(year, month, 1);
+        // Move 'date' back to the previous Monday
         date.setDate(date.getDate() - startDay);
 
+        // We create up to 6 "weeks"
         for (let week = 0; week < 6; week++) {
           const weekDiv = document.createElement("div");
           weekDiv.className = "week-row";
@@ -430,12 +495,13 @@
             const dateStr = date.toISOString().split("T")[0];
             daySpan.setAttribute("data-date", dateStr);
 
+            // If day belongs to previous/next month
             if (date.getMonth() !== month) {
               daySpan.textContent = date.getDate();
               daySpan.classList.add("last-month");
             } else {
               daySpan.textContent = date.getDate();
-
+              // highlight today's date
               if (
                 date.toDateString() ===
                 new Date().toDateString()
@@ -444,6 +510,7 @@
               }
             }
 
+            // If we have workout data, color the day
             if (workoutData[dateStr]) {
               daySpan.classList.add(
                 workoutData[dateStr].workedOut
@@ -460,7 +527,6 @@
 
             date.setDate(date.getDate() + 1);
           }
-
           calendarWeeks.appendChild(weekDiv);
         }
       }
@@ -470,18 +536,20 @@
         generateCalendar();
       }
 
+      /*************************************************************
+       *  3) EVENT FORM (BACK SIDE) & EXERCISE FIELDS
+       *************************************************************/
       function showEventForm(date) {
         currentSelectedDate = date.toISOString().split("T")[0];
         document
           .querySelector(".calendar")
           .classList.add("flip");
-        // Add a class to the container so it fills the viewport during the flip
         document
           .getElementById("calendar-container")
           .classList.add("flip-active");
-        // Hide icon bar and footer when showing event form
         document.querySelector(".icon-bar").style.display =
           "none";
+        document.querySelector("footer").style.display = "none";
 
         const workoutCheckbox = document.getElementById(
           "workout-checkbox"
@@ -495,52 +563,83 @@
         workoutTitle.value = "";
         workoutLog.innerHTML = "";
 
+        // If we have saved data, re-populate
         if (workoutData[currentSelectedDate]) {
           workoutTitle.value =
             workoutData[currentSelectedDate].title || "";
           workoutCheckbox.checked =
             workoutData[currentSelectedDate].workedOut;
+
           workoutData[currentSelectedDate].exercises.forEach(
             (ex) => {
               addExerciseField(ex.exercise, ex.weight);
             }
           );
-
-          const addButton = document.createElement("button");
-          addButton.className = "add-exercise";
-          addButton.onclick = () => addExerciseField();
-          addButton.innerHTML =
-            '<i class="fas fa-plus"></i> Add Exercise';
-          workoutLog.appendChild(addButton);
         } else {
-          workoutLog.innerHTML = `
-            <div class="exercise-entry">
-              <input type="text" class="event-input exercise-input" placeholder="Exercise">
-              <input type="number" class="event-input weight-input" placeholder="Weight">
-            </div>
-            <button class="add-exercise" onclick="addExerciseField()">
-              <i class="fas fa-plus"></i> Add Exercise
-            </button>
-          `;
+          // Otherwise, create one blank row
+          addExerciseField("", "");
         }
       }
 
+      // Adds one row with a dropdown of exercises + weight
       function addExerciseField(exercise = "", weight = "") {
         const entry = document.createElement("div");
         entry.className = "exercise-entry";
-        entry.innerHTML = `
-          <input type="text" class="event-input exercise-input" placeholder="Exercise" value="${exercise}">
-          <input type="number" class="event-input weight-input" placeholder="Weight (lb)" value="${weight}">
-        `;
+
+        // CREATE THE SELECT (dropdown)
+        const select = document.createElement("select");
+        select.className = "exercise-select";
+        const placeholderOpt = document.createElement("option");
+        placeholderOpt.value = "";
+        placeholderOpt.textContent = "Select an exercise";
+        select.appendChild(placeholderOpt);
+
+        // Populate with all exercises
+        allExercises.forEach((exObj) => {
+          const opt = document.createElement("option");
+          opt.value = exObj.name; // or exObj._id
+          opt.textContent = exObj.name;
+          select.appendChild(opt);
+        });
+
+        if (exercise) {
+          select.value = exercise;
+        }
+
+        // CREATE THE WEIGHT INPUT
+        const weightInput = document.createElement("input");
+        weightInput.type = "number";
+        weightInput.className = "weight-input";
+        weightInput.placeholder = "Weight (lb)";
+        weightInput.value = weight || "";
+
+        // CREATE THE +ADD BUTTON
+        const addBtn = document.createElement("button");
+        addBtn.className = "add-exercise";
+        addBtn.innerHTML = '<i class="fas fa-plus"></i> Add';
+        addBtn.title = "Add another exercise row";
+        addBtn.onclick = () => addExerciseField("", "");
+
+        // CREATE THE DELETE BUTTON
+        const delBtn = document.createElement("button");
+        delBtn.className = "delete-exercise";
+        delBtn.innerHTML =
+          '<i class="fas fa-trash"></i> Delete';
+        delBtn.title = "Delete this exercise row";
+        delBtn.onclick = () => {
+          entry.remove();
+        };
+
+        // APPEND EVERYTHING TO THE ROW
+        entry.appendChild(select);
+        entry.appendChild(weightInput);
+        entry.appendChild(addBtn);
+        entry.appendChild(delBtn);
+
+        // Finally, append to .workout-log
         const workoutLog =
           document.querySelector(".workout-log");
-        const addButton =
-          workoutLog.querySelector(".add-exercise");
-        if (addButton) {
-          workoutLog.insertBefore(entry, addButton);
-        } else {
-          workoutLog.appendChild(entry);
-        }
+        workoutLog.appendChild(entry);
       }
 
       function saveWorkout() {
@@ -554,13 +653,19 @@
         document
           .querySelectorAll(".exercise-entry")
           .forEach((entry) => {
-            const exercise = entry.querySelector(
-              ".exercise-input"
-            ).value;
-            const weight =
-              entry.querySelector(".weight-input").value;
-            if (exercise) {
-              exercises.push({ exercise, weight });
+            const select = entry.querySelector(
+              "select.exercise-select"
+            );
+            const weightInput =
+              entry.querySelector(".weight-input");
+            const exName = select.value.trim();
+            const wVal = weightInput.value.trim();
+
+            if (exName) {
+              exercises.push({
+                exercise: exName,
+                weight: wVal
+              });
             }
           });
 
@@ -594,11 +699,11 @@
         document
           .querySelector(".calendar")
           .classList.remove("flip");
-        // Remove the extra height class when closing the form
+        // Remove the extra height class
         document
           .getElementById("calendar-container")
           .classList.remove("flip-active");
-        // Show icon bar and footer again
+        // Show icon bar and footer
         document.querySelector(".icon-bar").style.display =
           "block";
         document.querySelector("footer").style.display =
@@ -606,24 +711,37 @@
         generateCalendar();
       }
 
-      generateCalendar();
+      /*************************************************************
+       *  4) INIT
+       *************************************************************/
+      async function init() {
+        // Load exercises first
+        await loadExercises();
+        // Then generate the calendar
+        generateCalendar();
+      }
+
+      // On page load, run init
+      window.addEventListener("DOMContentLoaded", init);
     </script>
 
     <div class="icon-bar">
       <div class="icons">
+        <a href="../index.html" class="icon">
+          <i class="fa-solid fa-calendar" title="Home"></i>
+        </a>
         <a href="pages/tracking.html" class="icon">
           <i class="fa fa-chart-line" title="Tracking"></i>
         </a>
-
         <a href="pages/exercise.html" class="icon">
           <i class="fa fa-dumbbell" title="Exercise Page"></i>
         </a>
-
         <a href="pages/settings.html" class="icon">
           <i class="fa fa-cog" title="Settings"></i>
         </a>
       </div>
     </div>
+
     <footer>
       <p>&copy; 2025 PumpPlanner. All rights reserved.</p>
     </footer>
