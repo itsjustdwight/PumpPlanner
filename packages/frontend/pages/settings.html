@@ -2,9 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Settings | PumpPlanner</title>
 
     <!-- Font / Icons -->
@@ -69,8 +67,10 @@
         font-size: 14px;
       }
 
-      button:hover {
-        background-color: #45a049;
+      /* Light Grey Contact Us Button */
+      .contact-btn {
+        background-color: #b0b0b0;
+        color: black;
       }
 
       /* Logout and Home Buttons */
@@ -88,7 +88,7 @@
         padding: 8px;
       }
 
-      .logout-btn:hover {
+      .logout-btn:hover, .home-btn:hover {
         background-color: darkred;
       }
 
@@ -173,24 +173,18 @@
     </style>
   </head>
   <body>
-    <div class="settings-container">
-      <h1>Settings</h1>
+    <div class="content-wrapper">
+      <div class="settings-container">
+        <h1>Settings</h1>
 
-      <label>New Password:</label>
-      <input
-        type="password"
-        id="newPassword"
-        placeholder="Enter new password" />
+        <label>New Password:</label>
+        <input type="password" id="newPassword" placeholder="Enter new password" />
 
-      <label>Confirm Password:</label>
-      <input
-        type="password"
-        id="confirmPassword"
-        placeholder="Confirm new password" />
+        <label>Confirm Password:</label>
+        <input type="password" id="confirmPassword" placeholder="Confirm new password" />
 
-      <button onclick="changePassword()">
-        Change Password
-      </button>
+        <button onclick="changePassword()">Change Password</button>
+        <button class="contact-btn" onclick="goToContact()">Contact Us</button>
 
       <!-- Logout and Home Buttons -->
       <div class="button-container">
@@ -209,11 +203,8 @@
 
     <script>
       function changePassword() {
-        const newPassword =
-          document.getElementById("newPassword").value;
-        const confirmPassword = document.getElementById(
-          "confirmPassword"
-        ).value;
+        const newPassword = document.getElementById("newPassword").value;
+        const confirmPassword = document.getElementById("confirmPassword").value;
 
         if (newPassword !== confirmPassword) {
           alert("Passwords do not match. Please try again.");
@@ -233,7 +224,11 @@
       }
 
       function goHome() {
-        window.location.href = "../index.html";
+        window.location.href = "index.html";
+      }
+
+      function goToContact() {
+        window.location.href = "contact.html";
       }
 
       function contactPage() {
