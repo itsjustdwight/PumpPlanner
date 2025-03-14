@@ -1,4 +1,3 @@
-import React from "react";
 import "./SearchResultsList.css";
 import { SearchResult } from "./SearchResult";
 import PropTypes from "prop-types";
