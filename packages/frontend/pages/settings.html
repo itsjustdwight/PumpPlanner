@@ -1,42 +1,55 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Settings | PumpPlanner</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+    <!-- Font / Icons -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap"
+      rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link
+      rel="preconnect"
+      href="https://fonts.googleapis.com" />
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anton&family=Anton+SC&display=swap"
+      rel="stylesheet" />
+
     <style>
+      /* Base Page Styles */
       body {
-        font-family: "Montserrat", sans-serif;
-        background-color: #000;
-        color: #f0f0f0;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        align-items: center;
-        height: 100vh;
         margin: 0;
+        background-color: #000;
+        font-family: "Anton", sans-serif;
+        color: #f0f0f0;
       }
 
-      .content-wrapper {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        flex: 1;
-      }
-
+      /* Main container for settings */
       .settings-container {
+        max-width: 320px;
+        margin: 60px auto; /* Center horizontally, some top spacing */
         background-color: rgba(255, 255, 255, 0.1);
         padding: 20px;
         border-radius: 10px;
-        width: 300px;
         text-align: center;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 10px 16px rgba(244, 2, 2, 0.3);
+
+        /* Extra bottom padding so content isn't hidden behind bars if scrolling */
+        padding-bottom: 20px;
       }
 
-      input, button {
+      /* Inputs and buttons */
+      input,
+      select,
+      button {
         width: 90%;
         padding: 8px;
         margin: 10px 0;
@@ -48,6 +61,8 @@
       }
 
       button {
+        font-family: "Anton", sans-serif;
+        background-color: #4caf50;
         cursor: pointer;
         font-size: 14px;
       }
@@ -58,37 +73,102 @@
         color: black;
       }
 
-      .contact-btn:hover {
-        background-color: #a0a0a0;
+      /* Logout and Home Buttons */
+      .button-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 15px;
       }
 
-      /* Red Logout and Home Buttons */
-      .logout-btn, .home-btn {
+      .logout-btn {
+        font-family: "Anton", sans-serif;
         background-color: red;
-        width: 45%;
+        width: 90%;
+        margin: 10px 0;
+        padding: 8px;
       }
 
       .logout-btn:hover, .home-btn:hover {
         background-color: darkred;
       }
 
-      .home-btn i {
-        font-size: 18px;
-      }
-
-      .button-container {
+      /* "Contact Us" in its own container below the others */
+      .contact-container {
+        margin-top: 60px; /* Some space below the other buttons */
         display: flex;
-        justify-content: space-between;
-        margin-top: 15px;
+        justify-content: center;
+      }
+      .contact-btn {
+        font-family: "Anton", sans-serif;
+        background-color: blue;
+        width: 90%; /* Full width (relative to container) for consistency */
+        height: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .contact-btn:hover {
+        background-color: white;
+        color: black;
       }
 
-      footer {
+      /* Fixed Icon Bar (above the footer) */
+      .icon-bar {
+        position: fixed;
+        bottom: 70px; /* Increase this offset so it doesn't overlap the footer */
+        left: 0;
         width: 100%;
+        background: linear-gradient(145deg, #4a4a4a, #2c2c2c);
+        padding: 15px 0;
+        margin-top: auto;
+        box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.6);
+        border-radius: 20px 20px 0 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .icons {
+        display: flex;
+        margin-top: auto;
+        text-align: center;
+        font-size: 40px;
+      }
+
+      .icon {
+        padding-inline: 50px;
+        color: #f0f0f0;
+        cursor: pointer;
+      }
+
+      /* Fixed Footer (very bottom) */
+      footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: #1a1a1a;
+        color: #f0f0f0;
         text-align: center;
         padding: 10px 0;
-        background-color: rgba(255, 255, 255, 0.1);
-        position: relative;
-        bottom: 0;
+        margin: 0;
+      }
+
+      /* Optional: Dark Mode */
+      body.light-mode {
+        background-color: #f0f0f0;
+        color: #000;
+      }
+      .light-mode .settings-container {
+        background-color: rgba(0, 0, 0, 0.1);
+      }
+      .light-mode input,
+      .light-mode button {
+        background-color: #ddd;
+        color: #000;
+      }
+      .light-mode button {
+        background-color: #333;
       }
     </style>
   </head>
@@ -106,10 +186,18 @@
         <button onclick="changePassword()">Change Password</button>
         <button class="contact-btn" onclick="goToContact()">Contact Us</button>
 
-        <div class="button-container">
-          <button class="logout-btn" onclick="logout()">Log Out</button>
-          <button class="home-btn" onclick="goHome()"><i class="fa fa-home"></i></button>
-        </div>
+      <!-- Logout and Home Buttons -->
+      <div class="button-container">
+        <button class="logout-btn" onclick="logout()">
+          Log Out
+        </button>
+      </div>
+
+      <!-- Contact Us button below -->
+      <div class="contact-container">
+        <button class="contact-btn" onclick="contactPage()">
+          Contact Us
+        </button>
       </div>
     </div>
 
@@ -130,7 +218,9 @@
       function logout() {
         sessionStorage.clear();
         alert("You have been logged out.");
-        window.location.href = "login.html";
+        setTimeout(() => {
+          window.location.replace("../login.html");
+        }, 200);
       }
 
       function goHome() {
@@ -140,8 +230,31 @@
       function goToContact() {
         window.location.href = "contact.html";
       }
+
+      function contactPage() {
+        window.location.href = "contactus.html";
+      }
     </script>
 
+    <!-- Icon Bar (above the footer) -->
+    <div class="icon-bar">
+      <div class="icons">
+        <a href="../index.html" class="icon">
+          <i class="fa-solid fa-calendar" title="Home"></i>
+        </a>
+        <a href="tracking.html" class="icon">
+          <i class="fa fa-chart-line" title="Tracking"></i>
+        </a>
+        <a href="exercise.html" class="icon">
+          <i class="fa fa-dumbbell" title="Exercise Page"></i>
+        </a>
+        <a href="settings.html" class="icon">
+          <i class="fa fa-cog" title="Settings"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- Footer at the very bottom -->
     <footer>
       <p>&copy; 2025 PumpPlanner. All rights reserved.</p>
     </footer>

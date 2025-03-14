@@ -1,6 +1,5 @@
-import React from "react";
 import { useState } from "react";
-//import { FaSearch } from "react-icons/fa";
+import { FaSearch } from "react-icons/fa";
 import PropTypes from "prop-types";
 
 import "./SearchBar.css";

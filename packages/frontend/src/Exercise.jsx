@@ -1,5 +1,4 @@
 import { useState } from "react";
-import React from "react";
 import { SearchBar } from "./ExComponents/SearchBar";
 import { SearchResultsList } from "./ExComponents/SearchResultsList";
 

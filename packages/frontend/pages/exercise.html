@@ -1,4 +1,3 @@
-<!-- exercise.html -->
 <!doctype html>
 <html lang="en">
   <head>
@@ -6,44 +5,80 @@
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link
+      rel="preconnect"
+      href="https://fonts.googleapis.com" />
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anton&family=Anton+SC&display=swap"
+      rel="stylesheet" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0" />
     <title>Exercises - PumpPlanner</title>
     <link href="../css/style.css" rel="stylesheet" />
     <style>
+      /* Existing styles for icon bar, etc. */
       .icon-bar {
-        background: linear-gradient(
-          145deg,
-          #4a4a4a,
-          #2c2c2c
-        ); /* Stylish gradient from darker to lighter gray */
-        padding: 15px 0; /* Increased padding for better visual spacing */
+        background: linear-gradient(145deg, #4a4a4a, #2c2c2c);
+        padding: 15px 0;
         margin-top: auto;
         width: 100%;
-        box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.6); /* Enhanced shadow for more depth */
-        border-radius: 20px 20px 0 0; /* Softer rounded corners at the top */
+        box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.6);
+        border-radius: 20px 20px 0 0;
         display: flex;
-        justify-content: center; /* Ensures icons are centered */
-        align-items: center; /* Aligns icons vertically */
+        justify-content: center;
+        align-items: center;
       }
-
       .icons {
         margin-top: auto;
         text-align: center;
-        font-size: 40px; /* Increased font size */
+        font-size: 40px;
       }
       .icon {
-        padding: 10px;
-        color: #f0f0f0; /* Soft white to match text color */
-        cursor: pointer; /* Indicates that the icons are interactive */
+        padding-inline: 50px;
+        color: #f0f0f0;
+        cursor: pointer;
       }
       footer {
-        padding: 20px;
+        padding: 10px;
         text-align: center;
         background-color: #1a1a1a;
         color: #f0f0f0;
-        margin-top: 20px; /* Added margin to ensure spacing between icons and footer */
+        margin-top: 20px;
+      }
+
+      /* NEW: Container for the scrollable exercises list */
+      #exercises-list {
+        width: 400px;
+        height: 300px; /* You can adjust this height as needed */
+        border: 1px solid #ccc;
+        overflow-y: auto; /* Allows vertical scrolling */
+        margin: 20px auto; /* Center on page */
+        padding: 10px;
+        background-color: #2c2c2c; /* Slightly darker background for contrast */
+        border-radius: 8px;
+      }
+      .exercise-item {
+        margin-bottom: 15px;
+        padding: 10px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 6px;
+      }
+      .exercise-item:not(:last-child) {
+        margin-bottom: 15px;
+      }
+      .exercise-name {
+        font-weight: bold;
+        font-size: 1.1rem;
+        margin-bottom: 5px;
+        color: #ff2600; /* Just an example highlight color */
+      }
+      .exercise-details p {
+        margin: 2px 0;
       }
     </style>
   </head>
@@ -51,20 +86,22 @@
     <header>
       <h1>Exercises</h1>
     </header>
-    <div id="root"></div>
-    <script
-      type="module"
-      src="../src/exercise_main.jsx"></script>
+
+    <!-- This is where we'll display the exercises in a scrollable list -->
+    <div id="exercises-list">Loading exercises...</div>
+
+    <!-- Icon bar / footer from your original code -->
     <div class="icon-bar">
       <div class="icons">
+        <a href="../index.html" class="icon">
+          <i class="fa-solid fa-calendar" title="Home"></i>
+        </a>
         <a href="tracking.html" class="icon">
           <i class="fa fa-chart-line" title="Tracking"></i>
         </a>
-
         <a href="exercise.html" class="icon">
           <i class="fa fa-dumbbell" title="Exercise"></i>
         </a>
-        <!-- Link to the Settings page -->
         <a href="settings.html" class="icon">
           <i class="fa fa-cog" title="Settings"></i>
         </a>
@@ -73,5 +110,66 @@
     <footer>
       <p>&copy; 2025 PumpPlanner. All rights reserved.</p>
     </footer>
+
+    <!-- Inline script to fetch exercises and populate the list -->
+    <script>
+      async function loadExercises() {
+        try {
+          // Fetch from your backend's /exercises route
+          const response = await fetch(
+            "http://localhost:8000/exercises"
+          );
+          if (!response.ok) {
+            throw new Error(
+              "Failed to load exercises: " + response.status
+            );
+          }
+
+          const exercises = await response.json(); // array of exercise objects
+          console.log("Exercises loaded:", exercises);
+
+          const container =
+            document.getElementById("exercises-list");
+          container.innerHTML = ""; // Clear placeholder text
+
+          exercises.forEach((ex) => {
+            // Wrapper for each exercise
+            const itemDiv = document.createElement("div");
+            itemDiv.className = "exercise-item";
+
+            // Exercise name
+            const nameEl = document.createElement("div");
+            nameEl.className = "exercise-name";
+            nameEl.textContent = ex.name || "Unnamed Exercise";
+
+            // Exercise details
+            const detailsEl = document.createElement("div");
+            detailsEl.className = "exercise-details";
+            detailsEl.innerHTML = `
+              <p>Type: ${ex.type || "N/A"}</p>
+              <p>Muscle: ${ex.muscle || "N/A"}</p>
+              <p>Equipment: ${ex.equipment || "N/A"}</p>
+              <p>Difficulty: ${ex.difficulty || "N/A"}</p>
+            `;
+
+            // Append to the container
+            itemDiv.appendChild(nameEl);
+            itemDiv.appendChild(detailsEl);
+            container.appendChild(itemDiv);
+          });
+        } catch (err) {
+          console.error("Error loading exercises:", err);
+          document.getElementById(
+            "exercises-list"
+          ).textContent = "Error loading exercises.";
+        }
+      }
+
+      // Load exercises once the page is ready
+      window.addEventListener(
+        "DOMContentLoaded",
+        loadExercises
+      );
+    </script>
   </body>
 </html>
