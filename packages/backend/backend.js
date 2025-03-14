@@ -59,6 +59,6 @@ app.post("/users", authenticateUser, (req, res) => {
 
 app.use("/api", exerciseRoutes);
 
-app.listen(port, () => {
-  console.log(`Server running on port: ${port}`);
+app.listen(process.env.PORT || port, () => {
+  console.log("REST API is listening.");
 });
