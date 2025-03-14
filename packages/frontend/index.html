@@ -41,7 +41,7 @@
 
       header {
         text-align: center;
-        padding: 20px 5%;
+        padding: 10px 5%;
         background-color: #1a1a1a;
       }
 
@@ -128,8 +128,8 @@
       }
 
       .calendar-day {
-        width: 90px;
-        height: 90px;
+        width: 50px;
+        height: 70px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -157,7 +157,7 @@
 
       .icon-bar {
         background: linear-gradient(145deg, #4a4a4a, #2c2c2c);
-        padding: 20px 0;
+        padding: 15px 0;
         width: 100%;
         box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.6);
       }
@@ -172,7 +172,7 @@
       .icon {
         color: #f0f0f0;
         cursor: pointer;
-        transition: transform 0.2s;
+        padding-inline: 50px;
       }
 
       .icon:hover {
@@ -180,7 +180,7 @@
       }
 
       footer {
-        padding: 20px;
+        padding: 10px;
         text-align: center;
         background-color: #1a1a1a;
         color: #f0f0f0;
@@ -223,10 +223,29 @@
       }
 
       .attendance-check {
-        margin-bottom: 20px;
-        padding: 15px;
-        background: #333;
-        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center; /* centers content horizontally */
+        gap: 20px;
+        margin: 0 auto; /* centers the container itself */
+        width: 100%;
+      }
+
+      .workout-question {
+        margin: 0;
+        font-size: 18px;
+      }
+
+      .workout-options {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .workout-options .option {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
       }
 
       .attendance-check label {
@@ -411,10 +430,35 @@
                 placeholder="What did you hit today?" />
             </div>
             <div class="attendance-check">
-              <label>
-                <input type="checkbox" id="workout-checkbox" />
-                Did you work out today?
-              </label>
+              <p class="workout-question">
+                Did you workout today?
+              </p>
+              <div class="workout-options">
+                <div class="option">
+                  <label for="workout-yes">Yes</label>
+                  <input
+                    type="checkbox"
+                    id="workout-yes"
+                    name="workout-status"
+                    value="worked" />
+                </div>
+                <div class="option">
+                  <label for="workout-no">No</label>
+                  <input
+                    type="checkbox"
+                    id="workout-no"
+                    name="workout-status"
+                    value="not-worked" />
+                </div>
+                <div class="option">
+                  <label for="workout-rest">Rest Day</label>
+                  <input
+                    type="checkbox"
+                    id="workout-rest"
+                    name="workout-status"
+                    value="rest" />
+                </div>
+              </div>
             </div>
             <div class="workout-log">
               <!-- We'll dynamically insert exercise fields here -->
@@ -452,7 +496,8 @@
        *  2) CALENDAR & WORKOUT LOGIC
        *************************************************************/
       let currentDate = new Date();
-      let workoutData = {};
+      let workoutData =
+        JSON.parse(localStorage.getItem("workoutData")) || {};
       let currentSelectedDate = null;
 
       // Generate the calendar
@@ -512,11 +557,14 @@
 
             // If we have workout data, color the day
             if (workoutData[dateStr]) {
-              daySpan.classList.add(
-                workoutData[dateStr].workedOut
-                  ? "worked-out"
-                  : "skipped"
-              );
+              if (workoutData[dateStr].status === "worked") {
+                daySpan.classList.add("worked-out");
+              } else if (
+                workoutData[dateStr].status === "not-worked"
+              ) {
+                daySpan.classList.add("skipped");
+              }
+              // For "rest", leave it uncolored.
             }
 
             const dayDate = new Date(date);
@@ -551,34 +599,50 @@
           "none";
         document.querySelector("footer").style.display = "none";
 
-        const workoutCheckbox = document.getElementById(
-          "workout-checkbox"
-        );
-        const workoutLog =
-          document.querySelector(".workout-log");
         const workoutTitle =
           document.getElementById("workout-title");
+        const workoutLog =
+          document.querySelector(".workout-log");
 
-        workoutCheckbox.checked = false;
+        // Clear previous values
         workoutTitle.value = "";
         workoutLog.innerHTML = "";
 
-        // If we have saved data, re-populate
-        if (workoutData[currentSelectedDate]) {
-          workoutTitle.value =
-            workoutData[currentSelectedDate].title || "";
-          workoutCheckbox.checked =
-            workoutData[currentSelectedDate].workedOut;
+        // Clear any previously selected workout status checkboxes
+        const workoutCheckboxes = document.querySelectorAll(
+          'input[name="workout-status"]'
+        );
+        workoutCheckboxes.forEach(
+          (chk) => (chk.checked = false)
+        );
 
-          workoutData[currentSelectedDate].exercises.forEach(
-            (ex) => {
-              addExerciseField(ex.exercise, ex.weight);
+        // Restore saved data for the selected date, if any
+        if (workoutData[currentSelectedDate]) {
+          let savedWorkout = workoutData[currentSelectedDate];
+          workoutTitle.value = savedWorkout.title || "";
+          if (savedWorkout.status) {
+            let statusCheckbox = document.querySelector(
+              'input[name="workout-status"][value="' +
+                savedWorkout.status +
+                '"]'
+            );
+            if (statusCheckbox) {
+              statusCheckbox.checked = true;
             }
-          );
+          }
+          // Restore saved exercise entries
+          savedWorkout.exercises.forEach((ex) => {
+            addExerciseField(ex.exercise, ex.weight);
+          });
         } else {
-          // Otherwise, create one blank row
-          addExerciseField("", "");
+          // Set default to "rest" if no saved data exists
+          document.querySelector(
+            'input[name="workout-status"][value="rest"]'
+          ).checked = true;
         }
+
+        // Always add an empty exercise entry row
+        addExerciseField("", "");
       }
 
       // Adds one row with a dropdown of exercises + weight
@@ -645,11 +709,17 @@
       function saveWorkout() {
         const workoutTitle =
           document.getElementById("workout-title").value;
-        const workedOut = document.getElementById(
-          "workout-checkbox"
-        ).checked;
+        // Get the selected workout status from the checkboxes
+        const selectedCheckbox = document.querySelector(
+          'input[name="workout-status"]:checked'
+        );
+        const workoutStatus = selectedCheckbox
+          ? selectedCheckbox.value
+          : "rest";
+
         const exercises = [];
 
+        // Gather all exercise entries
         document
           .querySelectorAll(".exercise-entry")
           .forEach((entry) => {
@@ -669,11 +739,28 @@
             }
           });
 
-        workoutData[currentSelectedDate] = {
-          title: workoutTitle,
-          workedOut,
-          exercises
-        };
+        // Save or update the workout data for the selected date
+        if (!workoutData[currentSelectedDate]) {
+          workoutData[currentSelectedDate] = {
+            title: workoutTitle,
+            status: workoutStatus,
+            exercises: exercises
+          };
+        } else {
+          workoutData[currentSelectedDate].title = workoutTitle;
+          workoutData[currentSelectedDate].status =
+            workoutStatus;
+          workoutData[currentSelectedDate].exercises = [
+            ...workoutData[currentSelectedDate].exercises,
+            ...exercises
+          ];
+        }
+
+        // Persist the data to localStorage
+        localStorage.setItem(
+          "workoutData",
+          JSON.stringify(workoutData)
+        );
 
         updateCalendarDayColor();
         closeEventForm();
@@ -685,14 +772,19 @@
         allDays.forEach((day) => {
           const dayStr = day.getAttribute("data-date");
           day.classList.remove("worked-out", "skipped");
+
           if (workoutData[dayStr]) {
-            day.classList.add(
-              workoutData[dayStr].workedOut
-                ? "worked-out"
-                : "skipped"
-            );
+            if (workoutData[dayStr].status === "worked") {
+              day.classList.add("worked-out");
+            } else if (
+              workoutData[dayStr].status === "not-worked"
+            ) {
+              day.classList.add("skipped");
+            }
           }
         });
+
+        generateCalendar(); // Refresh calendar to show updates
       }
 
       function closeEventForm() {
@@ -720,6 +812,22 @@
         // Then generate the calendar
         generateCalendar();
       }
+
+      document
+        .querySelectorAll('input[name="workout-status"]')
+        .forEach((chk) => {
+          chk.addEventListener("change", function () {
+            if (this.checked) {
+              document
+                .querySelectorAll(
+                  'input[name="workout-status"]'
+                )
+                .forEach((other) => {
+                  if (other !== this) other.checked = false;
+                });
+            }
+          });
+        });
 
       // On page load, run init
       window.addEventListener("DOMContentLoaded", init);

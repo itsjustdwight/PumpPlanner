@@ -2,58 +2,121 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0" />
-    <title>Tracking - PumpPlanner</title>
-    <link href="../css/style.css" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link
+      rel="preconnect"
+      href="https://fonts.googleapis.com" />
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anton&family=Anton+SC&display=swap"
+      rel="stylesheet" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0" />
+    <title>Workout Progress</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-      .icon-bar {
-        background: linear-gradient(
-          145deg,
-          #4a4a4a,
-          #2c2c2c
-        ); /* Stylish gradient from darker to lighter gray */
-        padding: 15px 0; /* Increased padding for better visual spacing */
-        margin-top: auto;
-        width: 100%;
-        box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.6); /* Enhanced shadow for more depth */
-        border-radius: 20px 20px 0 0; /* Softer rounded corners at the top */
+      body {
+        font-family: "Anton", sans-serif;
+        background-color: #1a1a1a;
+        color: white;
+        text-align: center;
+        margin: 0;
+        padding: 20px;
+      }
+
+      h1 {
+        color: #ff2600;
+        font-family: "Anton", sans-serif;
+      }
+
+      .chart-container {
+        width: 80%;
+        margin: auto;
+        background: #262626;
+        padding: 20px;
+        border-radius: 10px;
+      }
+
+      .month-navigation {
         display: flex;
-        justify-content: center; /* Ensures icons are centered */
-        align-items: center; /* Aligns icons vertically */
+        justify-content: space-between;
+        align-items: center;
+        margin: 20px auto;
+        max-width: 500px;
+      }
+
+      .nav-button {
+        background: #ff2600;
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background 0.3s;
+      }
+
+      .nav-button:hover {
+        background: #ff4d32;
+      }
+
+      .icon-bar {
+        background: linear-gradient(145deg, #4a4a4a, #2c2c2c);
+        padding: 15px 0;
+        width: 100%;
+        box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.6);
       }
 
       .icons {
-        margin-top: auto;
-        text-align: center;
-        font-size: 40px; /* Increased font size */
+        display: flex;
+        justify-content: center;
+        gap: 40px;
+        font-size: 50px;
       }
+
       .icon {
-        padding: 10px;
-        color: #f0f0f0; /* Soft white to match text color */
-        cursor: pointer; /* Indicates that the icons are interactive */
+        color: #f0f0f0;
+        cursor: pointer;
+        padding-inline: 50px;
       }
+
+      .icon:hover {
+        transform: scale(1.1);
+      }
+
       footer {
-        padding: 20px;
+        font-family: "Anton", sans-serif;
+        padding: 10px;
         text-align: center;
         background-color: #1a1a1a;
         color: #f0f0f0;
-        margin-top: 20px; /* Added margin to ensure spacing between icons and footer */
       }
     </style>
   </head>
   <body>
-    <header>
-      <h1>Tracking</h1>
-    </header>
-    <div id="root"></div>
-    <script
-      type="module"
-      src="../src/exercise_main.jsx"></script>
+    <h1>Tracking</h1>
+    <div class="month-navigation">
+      <button class="nav-button" onclick="changeMonth(-1)">
+        &lt;
+      </button>
+      <h2 id="current-month-year"></h2>
+      <button class="nav-button" onclick="changeMonth(1)">
+        &gt;
+      </button>
+    </div>
+    <div class="chart-container">
+      <canvas id="workoutChart"></canvas>
+    </div>
+
     <div class="icon-bar">
       <div class="icons">
         <a href="../index.html" class="icon">
@@ -65,14 +128,113 @@
         <a href="exercise.html" class="icon">
           <i class="fa fa-dumbbell" title="Exercise Page"></i>
         </a>
-        <!-- Link to the Settings page -->
         <a href="settings.html" class="icon">
           <i class="fa fa-cog" title="Settings"></i>
         </a>
       </div>
     </div>
+
     <footer>
       <p>&copy; 2025 PumpPlanner. All rights reserved.</p>
     </footer>
+
+    <script>
+      let workoutData =
+        JSON.parse(localStorage.getItem("workoutData")) || {};
+      let currentDate = new Date();
+
+      function getMonthYearString(date) {
+        return date.toLocaleDateString("en-US", {
+          month: "long",
+          year: "numeric"
+        });
+      }
+
+      function getWorkoutStatsForMonth(date) {
+        const year = date.getFullYear();
+        const month = date.getMonth();
+        const lastDay = new Date(year, month + 1, 0).getDate();
+        // Initialize an array with 5 columns
+        let stats = [0, 0, 0, 0, 0];
+
+        for (let day = 1; day <= lastDay; day++) {
+          let dayObj = new Date(year, month, day);
+          let dayStr = dayObj.toISOString().split("T")[0];
+          // Count only if the status is "worked"
+          if (
+            workoutData[dayStr] &&
+            workoutData[dayStr].status === "worked"
+          ) {
+            let weekIndex = Math.floor((day - 1) / 7);
+            // Clamp weekIndex to 4 (for 5 columns) in case it exceeds the bounds
+            if (weekIndex > 4) weekIndex = 4;
+            stats[weekIndex]++;
+          }
+        }
+        return stats;
+      }
+
+      function updateChart() {
+        document.getElementById(
+          "current-month-year"
+        ).textContent = getMonthYearString(currentDate);
+        let weeklyStats = getWorkoutStatsForMonth(currentDate);
+        workoutChart.data.datasets[0].data = weeklyStats;
+        workoutChart.update();
+      }
+
+      function changeMonth(offset) {
+        currentDate.setMonth(currentDate.getMonth() + offset);
+        updateChart();
+      }
+
+      const ctx = document
+        .getElementById("workoutChart")
+        .getContext("2d");
+      const workoutChart = new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: [
+            "Week 1",
+            "Week 2",
+            "Week 3",
+            "Week 4",
+            "Week 5"
+          ],
+          datasets: [
+            {
+              label: "Days Completed",
+              data: getWorkoutStatsForMonth(currentDate),
+              backgroundColor: "#ff2600",
+              borderColor: "white",
+              borderWidth: 1
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                color: "white",
+                stepSize: 1,
+                precision: 0,
+                font: { family: "Anton", size: 16 }
+              },
+              suggestedMax: 7
+            },
+            x: {
+              ticks: {
+                color: "white",
+                font: { family: "Anton", size: 16 }
+              }
+            }
+          }
+        }
+      });
+
+      updateChart();
+    </script>
   </body>
 </html>
