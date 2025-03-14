@@ -5,19 +5,12 @@
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-    <link
-      rel="preconnect"
-      href="https://fonts.googleapis.com" />
-    <link
-      rel="preconnect"
-      href="https://fonts.gstatic.com"
-      crossorigin />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Anton&family=Anton+SC&display=swap"
       rel="stylesheet" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Exercises - PumpPlanner</title>
     <!--<link href="../css/style.css" rel="stylesheet" />-->
     <style>
@@ -114,23 +107,40 @@
     <!-- Inline script to fetch exercises and populate the list -->
     <script>
       async function loadExercises() {
+        const container = document.getElementById("exercises-list");
+        container.textContent = "Loading exercises...";
+
         try {
-          // Fetch from your backend's /exercises route
-          const response = await fetch(
-            "/api/exercises"
-          );
+          // Use relative URL for API endpoint
+          const response = await fetch("/api/exercises");
+
           if (!response.ok) {
-            throw new Error(
-              "Failed to load exercises: " + response.status
-            );
+            // Read the response text to help diagnose the error.
+            const errorText = await response.text();
+            throw new Error("Failed to load exercises: " + response.status + " " + errorText);
           }
 
-          const exercises = await response.json(); // array of exercise objects
-          console.log("Exercises loaded:", exercises);
+          // First, get raw text to see exactly what is returned
+          const rawText = await response.text();
+          console.log("Raw response text:", rawText);
 
-          const container =
-            document.getElementById("exercises-list");
-          container.innerHTML = ""; // Clear placeholder text
+          // Attempt to parse JSON
+          let exercises;
+          try {
+            exercises = JSON.parse(rawText);
+          } catch (jsonErr) {
+            throw new Error("Response was not valid JSON: " + jsonErr.message);
+          }
+
+          console.log("Parsed exercises:", exercises);
+
+          // Make sure it's an array before forEach
+          if (!Array.isArray(exercises)) {
+            throw new Error("Expected an array but got: " + JSON.stringify(exercises));
+          }
+
+          // Clear the container and populate
+          container.innerHTML = "";
 
           exercises.forEach((ex) => {
             // Wrapper for each exercise
@@ -159,17 +169,12 @@
           });
         } catch (err) {
           console.error("Error loading exercises:", err);
-          document.getElementById(
-            "exercises-list"
-          ).textContent = "Error loading exercises.";
+          container.textContent = "Error loading exercises.";
         }
       }
 
       // Load exercises once the page is ready
-      window.addEventListener(
-        "DOMContentLoaded",
-        loadExercises
-      );
+      window.addEventListener("DOMContentLoaded", loadExercises);
     </script>
   </body>
 </html>
