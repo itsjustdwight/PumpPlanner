@@ -473,6 +473,8 @@
     </div>
 
     <script>
+      const API_BASE_URL =
+        "https://pumplanner-307-bwa0h6dtfdfdftcv.westus-01.azurewebsites.net";
       /*************************************************************
        *  1) FETCH EXERCISES ON PAGE LOAD
        *************************************************************/
@@ -480,9 +482,7 @@
       async function loadExercises() {
         try {
           // Change the URL if your backend is different:
-          const res = await fetch(
-            "http://pumplanner-abfaftgqbdfnaxbn.westus-01.azurewebsites.net/exercises"
-          );
+          const res = await fetch(`${API_BASE_URL}/exercises`);
           if (!res.ok)
             throw new Error("Failed to load exercises");
           allExercises = await res.json();

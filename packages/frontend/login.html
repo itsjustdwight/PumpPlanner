@@ -171,6 +171,9 @@
     </div>
 
     <script>
+      const API_BASE_URL =
+        "https://pumplanner-307-bwa0h6dtfdfdftcv.westus-01.azurewebsites.net";
+
       async function handleLogin(event) {
         event.preventDefault();
         const username =
@@ -180,7 +183,7 @@
 
         try {
           const response = await fetch(
-            "http://pumplanner-abfaftgqbdfnaxbn.westus-01.azurewebsites.net/login",
+            `${API_BASE_URL}/exercises`,
             {
               method: "POST",
               headers: {
