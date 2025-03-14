@@ -1,5 +1,4 @@
 //App.jsx
-import React from "react";
 import "./App.css";
 import HomeScreen from "./HomeScreen";
 import ProductScreen from "./ProductScreen";

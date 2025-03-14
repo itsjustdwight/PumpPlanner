@@ -19,16 +19,24 @@ export async function registerUser(req, res) {
     } = req.body;
 
     // 1) Validate required fields
-    if (!firstName || !lastName || !username || !email || !pwd) {
+    if (
+      !firstName ||
+      !lastName ||
+      !username ||
+      !email ||
+      !pwd
+    ) {
       return res.status(400).send("Missing required fields.");
     }
 
     // 2) Check if user already exists by username or email
     const existingUser = await User.findOne({
-      $or: [{ username }, { email }],
+      $or: [{ username }, { email }]
     });
     if (existingUser) {
-      return res.status(409).send("User already exists (username/email).");
+      return res
+        .status(409)
+        .send("User already exists (username/email).");
     }
 
     // 3) Hash the password
@@ -41,19 +49,21 @@ export async function registerUser(req, res) {
       lastName,
       username,
       email,
-      password: hashedPassword,
+      password: hashedPassword
     });
 
     // 5) Save to database
     await newUser.save();
 
     // 6) Generate JWT token
-    const token = await generateAccessToken({ userId: newUser._id });
+    const token = await generateAccessToken({
+      userId: newUser._id
+    });
 
     // 7) Send success response
     res.status(201).json({
       message: "User registered successfully",
-      token,
+      token
     });
   } catch (error) {
     console.error("Error registering user:", error);
@@ -71,23 +81,34 @@ export async function loginUser(req, res) {
     const { username, pwd } = req.body;
 
     if (!username || !pwd) {
-      return res.status(400).send("Missing username or password.");
+      return res
+        .status(400)
+        .send("Missing username or password.");
     }
 
     // 1) Find user in DB by username
     const foundUser = await User.findOne({ username });
     if (!foundUser) {
-      return res.status(401).send("Unauthorized - username not found.");
+      return res
+        .status(401)
+        .send("Unauthorized - username not found.");
     }
 
     // 2) Compare passwords
-    const isMatch = await bcrypt.compare(pwd, foundUser.password);
+    const isMatch = await bcrypt.compare(
+      pwd,
+      foundUser.password
+    );
     if (!isMatch) {
-      return res.status(401).send("Unauthorized - incorrect password.");
+      return res
+        .status(401)
+        .send("Unauthorized - incorrect password.");
     }
 
     // 3) Generate token
-    const token = await generateAccessToken({ userId: foundUser._id });
+    const token = await generateAccessToken({
+      userId: foundUser._id
+    });
 
     // 4) Return success
     res.status(200).json({ token });
@@ -110,16 +131,20 @@ export function authenticateUser(req, res, next) {
       return res.status(401).send("No token provided.");
     }
 
-    jwt.verify(token, process.env.TOKEN_SECRET, (error, decoded) => {
-      if (error) {
-        console.log("JWT error:", error);
-        return res.status(401).send("Invalid token.");
-      }
+    jwt.verify(
+      token,
+      process.env.TOKEN_SECRET,
+      (error, decoded) => {
+        if (error) {
+          console.log("JWT error:", error);
+          return res.status(401).send("Invalid token.");
+        }
 
-      // Attach user info (decoded payload) to req if needed
-      req.user = decoded; // e.g. { userId: '...', iat: ..., exp: ... }
-      next();
-    });
+        // Attach user info (decoded payload) to req if needed
+        req.user = decoded; // e.g. { userId: '...', iat: ..., exp: ... }
+        next();
+      }
+    );
   } catch (error) {
     console.error("Error authenticating user:", error);
     res.status(401).send("Unauthorized");

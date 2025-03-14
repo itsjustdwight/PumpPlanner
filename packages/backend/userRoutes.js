@@ -13,7 +13,9 @@ const router = express.Router();
 router.get("/me", authenticateUser, async (req, res) => {
   try {
     // `req.user` is set by your authenticateUser middleware
-    const user = await User.findById(req.user._id).select("-password"); 
+    const user = await User.findById(req.user._id).select(
+      "-password"
+    );
     // `-password` excludes the password field from the returned data
 
     if (!user) {
@@ -45,11 +47,11 @@ router.put("/me", authenticateUser, async (req, res) => {
       age,
       buildType,
       preferredExerciseFrequency,
-      weeklyRoutine,
+      weeklyRoutine
     } = req.body;
 
     // Optionally you can validate or sanitize fields here
-    
+
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       {
@@ -60,7 +62,7 @@ router.put("/me", authenticateUser, async (req, res) => {
         age,
         buildType,
         preferredExerciseFrequency,
-        weeklyRoutine,
+        weeklyRoutine
       },
       { new: true } // returns the updated user
     ).select("-password");
@@ -83,7 +85,9 @@ router.put("/me", authenticateUser, async (req, res) => {
  */
 router.get("/:id", async (req, res) => {
   try {
-    const user = await User.findById(req.params.id).select("-password");
+    const user = await User.findById(req.params.id).select(
+      "-password"
+    );
     if (!user) {
       return res.status(404).json({ error: "User not found." });
     }

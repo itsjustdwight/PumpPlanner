@@ -14,7 +14,7 @@ async function fetchExercises() {
     console.log(`🔄 Fetching exercises from API Ninjas...`);
 
     const response = await axios.get(API_URL, {
-      headers: { "X-Api-Key": API_KEY },
+      headers: { "X-Api-Key": API_KEY }
     });
 
     const exercises = response.data;
@@ -24,12 +24,16 @@ async function fetchExercises() {
       return;
     }
 
-    console.log(`✅ Successfully fetched ${exercises.length} exercises! Saving to file...`);
+    console.log(
+      `✅ Successfully fetched ${exercises.length} exercises! Saving to file...`
+    );
 
-    fs.writeFileSync("exercises.json", JSON.stringify(exercises, null, 2));
+    fs.writeFileSync(
+      "exercises.json",
+      JSON.stringify(exercises, null, 2)
+    );
 
     console.log("✅ Exercises saved to exercises.json!");
-
   } catch (error) {
     console.error("❌ Error fetching exercises:", error);
   }
