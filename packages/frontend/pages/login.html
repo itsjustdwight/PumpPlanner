@@ -166,13 +166,13 @@
       </form>
       <p class="signup-link">
         New to PumpPlanner?
-        <a href="signup.html">Sign up here</a>
+        <a href="/pages/signup.html">Sign up here</a>
       </p>
     </div>
 
     <script>
       const API_BASE_URL =
-        "https://pumplanner-307-bwa0h6dtfdfdftcv.westus-01.azurewebsites.net"; // note the '/api' prefix
+        "https://pumplanner-307-bwa0h6dtfdfdftcv.westus-01.azurewebsites.net";
 
       async function handleLogin(event) {
         event.preventDefault();
@@ -205,7 +205,7 @@
           console.log("Login success:", data);
           sessionStorage.setItem("loggedIn", data.token);
           alert(`Welcome back, ${username}!`);
-          window.location.href = "index.html";
+          window.location.href = "/index.html";
         } catch (err) {
           console.error("Login error:", err);
           alert(
