@@ -14,7 +14,7 @@ function SignUp() {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:8000/signup", {
+      const response = await fetch("http://pumplanner-abfaftgqbdfnaxbn.westus-01.azurewebsites.net///signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
