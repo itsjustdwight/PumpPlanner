@@ -70,7 +70,7 @@
       /* Light Grey Contact Us Button */
       .contact-btn {
         background-color: #b0b0b0;
-        color: black;
+        color: white;
       }
 
       /* Logout and Home Buttons */
@@ -184,7 +184,7 @@
         <input type="password" id="confirmPassword" placeholder="Confirm new password" />
 
         <button onclick="changePassword()">Change Password</button>
-        <button class="contact-btn" onclick="goToContact()">Contact Us</button>
+        <!--<button class="contact-btn" onclick="goToContact()">Contact Us</button>-->
 
       <!-- Logout and Home Buttons -->
       <div class="button-container">
@@ -195,7 +195,7 @@
 
       <!-- Contact Us button below -->
       <div class="contact-container">
-        <button class="contact-btn" onclick="contactPage()">
+        <button class="contact-btn" onclick="goToContact()">
           Contact Us
         </button>
       </div>
@@ -229,10 +229,6 @@
 
       function goToContact() {
         window.location.href = "contact.html";
-      }
-
-      function contactPage() {
-        window.location.href = "contactus.html";
       }
     </script>
 
