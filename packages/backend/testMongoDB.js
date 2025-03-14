@@ -9,7 +9,7 @@ async function testMongoDBConnection() {
   try {
     await mongoose.connect(MONGO_URI, {
       useNewUrlParser: true,
-      useUnifiedTopology: true,
+      useUnifiedTopology: true
     });
     console.log("✅ Successfully connected to MongoDB!");
   } catch (error) {
