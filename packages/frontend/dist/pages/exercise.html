@@ -12,9 +12,10 @@
       rel="stylesheet" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Exercises - PumpPlanner</title>
-    <!--<link href="../css/style.css" rel="stylesheet" />-->
+    <!-- If ../css/style.css actually exists, keep this; otherwise remove or fix the path -->
+    <link href="../css/style.css" rel="stylesheet" />
     <style>
-      /* Existing styles for icon bar, etc. */
+      /* Icon bar and page styles */
       .icon-bar {
         background: linear-gradient(145deg, #4a4a4a, #2c2c2c);
         padding: 15px 0;
@@ -44,15 +45,15 @@
         margin-top: 20px;
       }
 
-      /* NEW: Container for the scrollable exercises list */
+      /* Scrollable exercises list */
       #exercises-list {
         width: 400px;
-        height: 300px; /* You can adjust this height as needed */
+        height: 300px; /* Adjust as needed */
         border: 1px solid #ccc;
-        overflow-y: auto; /* Allows vertical scrolling */
-        margin: 20px auto; /* Center on page */
+        overflow-y: auto;
+        margin: 20px auto;
         padding: 10px;
-        background-color: #2c2c2c; /* Slightly darker background for contrast */
+        background-color: #2c2c2c;
         border-radius: 8px;
       }
       .exercise-item {
@@ -68,7 +69,7 @@
         font-weight: bold;
         font-size: 1.1rem;
         margin-bottom: 5px;
-        color: #ff2600; /* Just an example highlight color */
+        color: #ff2600;
       }
       .exercise-details p {
         margin: 2px 0;
@@ -80,10 +81,10 @@
       <h1>Exercises</h1>
     </header>
 
-    <!-- This is where we'll display the exercises in a scrollable list -->
+    <!-- Scrollable list container -->
     <div id="exercises-list">Loading exercises...</div>
 
-    <!-- Icon bar / footer from your original code -->
+    <!-- Icon bar / footer -->
     <div class="icon-bar">
       <div class="icons">
         <a href="../index.html" class="icon">
@@ -104,55 +105,37 @@
       <p>&copy; 2025 PumpPlanner. All rights reserved.</p>
     </footer>
 
-    <!-- Inline script to fetch exercises and populate the list -->
     <script>
       async function loadExercises() {
         const container = document.getElementById("exercises-list");
         container.textContent = "Loading exercises...";
 
         try {
-          // Use relative URL for API endpoint
+          // Make sure your Azure Function is actually deployed at /api/exercises
           const response = await fetch("/api/exercises");
-
           if (!response.ok) {
-            // Read the response text to help diagnose the error.
-            const errorText = await response.text();
-            throw new Error("Failed to load exercises: " + response.status + " " + errorText);
+            throw new Error("Failed to load exercises: " + response.status);
           }
 
-          // First, get raw text to see exactly what is returned
-          const rawText = await response.text();
-          console.log("Raw response text:", rawText);
+          // Parse the JSON data
+          const exercises = await response.json();
+          console.log("Exercises loaded:", exercises);
 
-          // Attempt to parse JSON
-          let exercises;
-          try {
-            exercises = JSON.parse(rawText);
-          } catch (jsonErr) {
-            throw new Error("Response was not valid JSON: " + jsonErr.message);
-          }
-
-          console.log("Parsed exercises:", exercises);
-
-          // Make sure it's an array before forEach
+          // Validate we have an array
           if (!Array.isArray(exercises)) {
             throw new Error("Expected an array but got: " + JSON.stringify(exercises));
           }
 
-          // Clear the container and populate
+          // Clear and populate the list
           container.innerHTML = "";
-
           exercises.forEach((ex) => {
-            // Wrapper for each exercise
             const itemDiv = document.createElement("div");
             itemDiv.className = "exercise-item";
 
-            // Exercise name
             const nameEl = document.createElement("div");
             nameEl.className = "exercise-name";
             nameEl.textContent = ex.name || "Unnamed Exercise";
 
-            // Exercise details
             const detailsEl = document.createElement("div");
             detailsEl.className = "exercise-details";
             detailsEl.innerHTML = `
@@ -162,7 +145,6 @@
               <p>Difficulty: ${ex.difficulty || "N/A"}</p>
             `;
 
-            // Append to the container
             itemDiv.appendChild(nameEl);
             itemDiv.appendChild(detailsEl);
             container.appendChild(itemDiv);
@@ -173,7 +155,7 @@
         }
       }
 
-      // Load exercises once the page is ready
+      // Run once the page loads
       window.addEventListener("DOMContentLoaded", loadExercises);
     </script>
   </body>
