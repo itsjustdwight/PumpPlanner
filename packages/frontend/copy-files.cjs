@@ -4,7 +4,10 @@ const path = require('path');
 const filesToCopy = [
   'staticwebapp.config.json',
   'tracking.html',
-  'exercise.html'
+  'exercise.html',
+  'signup.html',
+  'settings.html',
+  'login.html'
 ];
 
 const srcDir = path.resolve(__dirname); // Root frontend directory
