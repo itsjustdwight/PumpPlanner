@@ -14,10 +14,6 @@
         "rewrite": "/pages/{*}"
       },
       {
-        "route": "/*.{html,css,js}",
-        "rewrite": "/index.html"
-      },
-      {
         "route": "/assets/{*}.{ext}",
         "serve": "/public/{*}.{ext}"
       }
@@ -33,4 +29,3 @@
       ".css": "text/css"
     }
   }
-  
