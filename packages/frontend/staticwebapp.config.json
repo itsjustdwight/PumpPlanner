@@ -1,7 +1,7 @@
 {
     "navigationFallback": {
       "rewrite": "/index.html",
-      "exclude": ["/api/*", "/css/*", "/pages/*"]
+      "exclude": ["/api/*", "/css/*"]
     },
     "routes": [
       {
@@ -10,12 +10,8 @@
         "allowedRoles": ["anonymous"]
       },
       {
-        "route": "/pages/{*}",
-        "rewrite": "/pages/{*}"
-      },
-      {
-        "route": "/assets/*.{png,jpg,jpeg,svg,gif,css,js}",
-        "serve": "/public"
+        "route": "/assets/*.{ext}",
+        "serve": "/public/*.{ext}"
       },
       {
         "route": "/*.{html,css,js}",
