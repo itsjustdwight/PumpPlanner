@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0" />
+    <title>Contact Us | PumpPlanner</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap"
+      rel="stylesheet" />
+    <link
+      rel="preconnect"
+      href="https://fonts.googleapis.com" />
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anton&family=Anton+SC&display=swap"
+      rel="stylesheet" />
+    <link href="../css/style.css" rel="stylesheet" />
+    <style>
+      body {
+        font-family: "Anton", sans-serif;
+        background-color: #000;
+        color: #f0f0f0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        transition:
+          transform 0.3s,
+          color 0.3s,
+          background-color 0.3s;
+      }
+
+      .contact-container {
+        background-color: rgba(255, 255, 255, 0.1);
+        padding: 20px;
+        border-radius: 10px;
+        width: 300px;
+        text-align: center;
+        box-shadow: 0 10px 40px rgba(244, 2, 2, 0.3);
+      }
+
+      input,
+      select,
+      textarea,
+      button {
+        font-family: "Anton", sans-serif;
+        width: 90%;
+        padding: 8px;
+        margin: 10px 0;
+        border: none;
+        border-radius: 5px;
+        background-color: #333;
+        color: #f0f0f0;
+        font-size: 14px;
+      }
+
+      textarea {
+        height: 80px;
+      }
+
+      button {
+        cursor: pointer;
+      }
+
+      .submit-btn {
+        background-color: #4caf50;
+      }
+
+      .submit-btn:hover {
+        background-color: #45a049;
+      }
+
+      /* Red Back to Settings Button */
+      .back-btn {
+        background-color: red;
+      }
+
+      .back-btn:hover {
+        background-color: darkred;
+      }
+
+      /* Light mode styles */
+      .light-mode {
+        background-color: #ffffff;
+        color: #000000;
+      }
+
+      /* Theme toggle button in top right corner with sun icon */
+      .theme-toggle {
+        position: fixed;
+        top: 20px;
+        left: 800px;
+        background: transparent;
+        border: none;
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+        transition:
+          transform 0.3s,
+          color 0.3s;
+      }
+
+      .theme-toggle:hover {
+        transform: scale(1.1);
+      }
+
+      .light-mode .theme-toggle {
+        color: black;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="contact-container">
+      <h1>Contact Us</h1>
+      <button
+        id="themeToggle"
+        class="theme-toggle"
+        onclick="toggleTheme()">
+        <i class="fa-solid fa-sun"></i>
+      </button>
+
+      <input
+        type="text"
+        id="name"
+        placeholder="First & Last Name" />
+      <input type="email" id="email" placeholder="Email" />
+
+      <select id="helpType">
+        <option value="feedback">General Feedback</option>
+        <option value="account">Account/Login Issues</option>
+        <option value="bug">Bug Report</option>
+        <option value="help">Need Help</option>
+        <option value="other">Other</option>
+      </select>
+
+      <textarea
+        id="additionalInfo"
+        placeholder="Provide additional details..."></textarea>
+
+      <button class="submit-btn" onclick="submitForm()">
+        Submit
+      </button>
+      <button class="back-btn" onclick="goBack()">
+        Back to Settings
+      </button>
+    </div>
+
+    <script>
+      // Load user's theme preference from localStorage
+      function loadTheme() {
+        const theme = localStorage.getItem("theme");
+        if (theme === "light") {
+          document.body.classList.add("light-mode");
+        }
+      }
+
+      // Toggle between dark and light themes
+      function toggleTheme() {
+        document.body.classList.toggle("light-mode");
+        const isLightMode =
+          document.body.classList.contains("light-mode");
+        localStorage.setItem(
+          "theme",
+          isLightMode ? "light" : "dark"
+        );
+      }
+
+      loadTheme();
+
+      function submitForm() {
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
+        const helpType =
+          document.getElementById("helpType").value;
+        const additionalInfo =
+          document.getElementById("additionalInfo").value;
+
+        if (!name || !email || !helpType) {
+          alert("Please fill in all required fields.");
+          return;
+        }
+
+        alert(
+          "Your request has been submitted. We will get back to you soon!"
+        );
+      }
+
+      function goBack() {
+        window.location.href = "settings.html";
+      }
+    </script>
+  </body>
+</html>

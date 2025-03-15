@@ -20,33 +20,38 @@
       content="width=device-width, initial-scale=1.0" />
     <title>Exercises | PUMPlanner</title>
     <style>
+      /* Global transitions */
       * {
         transition: 0.3s;
         color: 0.3s;
         transform: 0.3s;
       }
-
+      /* Disable transitions for exercises list */
       #exercises-list,
       #exercises-list * {
         transition: none !important;
       }
-
-      /* Icon bar and page styles */
+      /* Body and layout styles using flex */
       body {
         font-family: "Anton", sans-serif;
+        background-color: #1a1a1a;
+        color: white;
+        margin: 0;
+        padding: 20px;
         display: flex;
         flex-direction: column;
         min-height: 100vh;
-        margin: 0;
-        padding: 20px; /* Adjust if needed */
       }
       header {
         text-align: center;
       }
+      main {
+        flex: 1;
+      }
+      /* Icon bar and page styles */
       .icon-bar {
         background: linear-gradient(145deg, #4a4a4a, #2c2c2c);
         padding: 15px 0;
-        margin-top: auto;
         width: 100%;
         box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.6);
         border-radius: 20px 20px 0 0;
@@ -58,17 +63,14 @@
           box-shadow 0.3s;
       }
       .icons {
-        margin-top: auto;
         text-align: center;
         font-size: 50px;
       }
       .icon {
-        padding-inline: 50px;
+        padding: 0 50px;
         color: #f0f0f0;
         cursor: pointer;
-      }
-      a.icon {
-        text-decoration: none;
+        text-decoration: none; /* Remove underline from links */
       }
       footer {
         padding: 10px;
@@ -80,7 +82,6 @@
           transform 0.3s,
           color 0.3s;
       }
-
       /* Scrollable exercises list */
       #exercises-list {
         width: 400px;
@@ -91,7 +92,6 @@
         padding: 10px;
         background-color: #2c2c2c;
         border-radius: 8px;
-        transition: none;
       }
       .exercise-item {
         margin-bottom: 15px;
@@ -111,29 +111,31 @@
       .exercise-details p {
         margin: 2px 0;
       }
-
       /* Light mode styles */
       .light-mode {
         background-color: #ffffff;
         color: #000000;
       }
-
       .light-mode header {
         background-color: #ffffff;
         color: #000000;
       }
-
       .light-mode .icon-bar {
         background: linear-gradient(145deg, #f70606, #f70606);
         box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.2);
       }
-
       .light-mode footer {
         background-color: #ffffff;
         color: #000000;
       }
-
-      /* Theme toggle button in top right corner with sun icon */
+      .light-mode #exercises-list {
+        background-color: #f7f7f7;
+        border-color: #ccc;
+      }
+      .light-mode .exercise-item {
+        background: rgba(0, 0, 0, 0.05);
+      }
+      /* Theme toggle button in top right corner */
       .theme-toggle {
         position: fixed;
         top: 20px;
@@ -147,11 +149,9 @@
           transform 0.3s,
           color 0.3s;
       }
-
       .theme-toggle:hover {
         transform: scale(1.1);
       }
-
       .light-mode .theme-toggle {
         color: black;
       }
@@ -168,10 +168,12 @@
       </button>
     </header>
 
-    <!-- Scrollable list container -->
-    <div id="exercises-list">Loading exercises...</div>
+    <main>
+      <!-- Scrollable list container -->
+      <div id="exercises-list">Loading exercises...</div>
+    </main>
 
-    <!-- Icon bar / footer -->
+    <!-- Icon bar -->
     <div class="icon-bar">
       <div class="icons">
         <a href="index.html" class="icon">
@@ -200,7 +202,6 @@
           document.body.classList.add("light-mode");
         }
       }
-
       // Toggle between dark and light themes
       function toggleTheme() {
         document.body.classList.toggle("light-mode");
@@ -211,7 +212,6 @@
           isLightMode ? "light" : "dark"
         );
       }
-
       loadTheme();
 
       const API_BASE_URL =
@@ -223,7 +223,7 @@
         container.textContent = "Loading exercises...";
 
         try {
-          // Make sure your Azure Function is actually deployed at /api/exercises
+          // Make sure your Azure Function is deployed at /exercises
           const response = await fetch(
             `${API_BASE_URL}/exercises`
           );
@@ -232,11 +232,9 @@
               "Failed to load exercises: " + response.status
             );
           }
-
           // Parse the JSON data
           const exercises = await response.json();
           console.log("Exercises loaded:", exercises);
-
           // Validate we have an array
           if (!Array.isArray(exercises)) {
             throw new Error(
@@ -244,7 +242,6 @@
                 JSON.stringify(exercises)
             );
           }
-
           // Clear and populate the list
           container.innerHTML = "";
           exercises.forEach((ex) => {
@@ -263,7 +260,6 @@
               <p>Equipment: ${ex.equipment || "N/A"}</p>
               <p>Difficulty: ${ex.difficulty || "N/A"}</p>
             `;
-
             itemDiv.appendChild(nameEl);
             itemDiv.appendChild(detailsEl);
             container.appendChild(itemDiv);
@@ -273,7 +269,6 @@
           container.textContent = "Error loading exercises.";
         }
       }
-
       // Run once the page loads
       window.addEventListener(
         "DOMContentLoaded",
