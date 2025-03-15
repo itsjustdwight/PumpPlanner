@@ -14,7 +14,15 @@
         "serve": "/public/*.*"
       },
       {
-        "route": "/*.{html,css,js}",
+        "route": "/*.html",
+        "rewrite": "/index.html"
+      },
+      {
+        "route": "/*.css",
+        "rewrite": "/index.html"
+      },
+      {
+        "route": "/*.js",
         "rewrite": "/index.html"
       }
     ],
