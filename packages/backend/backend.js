@@ -16,13 +16,13 @@ dotenv.config();
 const { MONGO_CONNECTION_STRING } = process.env;
 
 mongoose.set("debug", true);
-mongoose.connect(MONGO_CONNECTION_STRING, {
-  dbName: "pumpplannerdb",
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-.catch((error) => console.log(error));
-
+mongoose
+  .connect(MONGO_CONNECTION_STRING, {
+    dbName: "pumpplannerdb",
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  })
+  .catch((error) => console.log(error));
 
 const app = express();
 const port = 8000;

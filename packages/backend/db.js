@@ -63,7 +63,7 @@ const userSchema = new mongoose.Schema(
     },
     age: {
       type: String,
-      required: true 
+      required: true
     },
     height: {
       type: String,
