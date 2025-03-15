@@ -12,6 +12,10 @@
   {
     "route": "/pages/{*}.",
     "rewrite": "/pages/{*}"
+  },
+  {
+    "route": "/*",
+    "rewrite": "/index.html"
   }
 ],
   "responseOverrides": {
