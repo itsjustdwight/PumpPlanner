@@ -14,8 +14,8 @@
         "rewrite": "/pages/{*}"
       },
       {
-        "route": "/assets/*.{ext}",
-        "serve": "/public/*.{ext}"
+        "route": "/assets/*.{png,jpg,jpeg,svg,gif,css,js}",
+        "serve": "/public"
       },
       {
         "route": "/*.{html,css,js}",
