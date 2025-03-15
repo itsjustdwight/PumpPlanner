@@ -1,12 +1,13 @@
 {
     "navigationFallback": {
       "rewrite": "/index.html",
-      "exclude": ["/api/*", "/css/*.*"]
+      "exclude": ["/api/*", "/*.css", "/*.mp4"]
     },
     "routes": [
       {
-        "route": "/assets/*.*",
-        "serve": "/public/*.*"
+        "route": "/api/{*any}",
+        "rewrite": "/api/{any}",
+        "allowedRoles": ["anonymous"]
       },
       {
         "route": "/*.html",
@@ -32,3 +33,4 @@
       ".css": "text/css"
     }
   }
+  
