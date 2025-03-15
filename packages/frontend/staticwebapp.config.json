@@ -1,6 +1,6 @@
 {
     "navigationFallback": {
-      "rewrite": "/index.html"
+      "rewrite": "/login.html"
     },
     "routes": [
       {
@@ -10,15 +10,15 @@
       },
       {
         "route": "/*.html",
-        "rewrite": "/index.html"
+        "rewrite": "/login.html"
       },
       {
         "route": "/*.css",
-        "rewrite": "/index.html"
+        "rewrite": "/login.html"
       },
       {
         "route": "/*.js",
-        "rewrite": "/index.html"
+        "rewrite": "/login.html"
       }
     ],
     "mimeTypes": {
