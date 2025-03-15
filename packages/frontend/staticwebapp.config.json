@@ -4,12 +4,12 @@
     "exclude": ["/api/*", "/css/*"]
   },
   "routes": [
-    {
-      "route": "/api/{*any}",
-      "rewrite": "/api/{any}",
-      "allowedRoles": ["anonymous"]
-    }
-  ],
+  {
+    "route": "/api/{*any}.",  
+    "rewrite": "/api/{any}",  
+    "allowedRoles": ["anonymous"]
+  }
+],
   "responseOverrides": {
     "404": {
       "rewrite": "/index.html",
