@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "postbuild": "node copy-files.js",
+    "postbuild": "node copy-files.cjs",
     "lint": "eslint .",
     "preview": "vite preview"
   },
