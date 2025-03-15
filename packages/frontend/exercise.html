@@ -33,11 +33,14 @@
 
       /* Icon bar and page styles */
       body {
-        font-family: "Anton", sans-serif;
-        background-color: #1a1a1a;
-        color: white;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
         margin: 0;
-        padding: 20px;
+        padding: 20px; /* Adjust if needed */
+      }
+      header {
+        text-align: center;
       }
       .icon-bar {
         background: linear-gradient(145deg, #4a4a4a, #2c2c2c);
@@ -62,6 +65,9 @@
         padding-inline: 50px;
         color: #f0f0f0;
         cursor: pointer;
+      }
+      a.icon {
+        text-decoration: none;
       }
       footer {
         padding: 10px;
