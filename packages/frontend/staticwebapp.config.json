@@ -4,8 +4,8 @@
     },
     "routes": [
       {
-        "route": "/api/{*any}",
-        "rewrite": "/api/{any}",
+        "route": "/api/*.",
+        "rewrite": "/api/",
         "allowedRoles": ["anonymous"]
       },
       {
