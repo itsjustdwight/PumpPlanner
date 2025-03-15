@@ -14,7 +14,7 @@
         "rewrite": "/pages/{*}"
       },
       {
-        "route": "/*",
+        "route": "/*.{html,css,js}",
         "rewrite": "/index.html"
       },
       {
