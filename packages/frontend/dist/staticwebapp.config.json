@@ -1,13 +1,17 @@
 {
   "navigationFallback": {
-    "rewrite": "/index.html",
-    "exclude": ["/api/*", "/css/*"]
-  },
+  "rewrite": "/index.html",
+  "exclude": ["/api/*", "/css/*", "/pages/*"]
+},
   "routes": [
   {
-    "route": "/api/{*any}.",  
-    "rewrite": "/api/{any}",  
+    "route": "/api/{*any}",
+    "rewrite": "/api/{any}",
     "allowedRoles": ["anonymous"]
+  },
+  {
+    "route": "/pages/{*}.",
+    "rewrite": "/pages/{*}"
   }
 ],
   "responseOverrides": {
