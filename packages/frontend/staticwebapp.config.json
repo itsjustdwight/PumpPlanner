@@ -10,15 +10,15 @@
       },
       {
         "route": "/*.html",
-        "rewrite": "/login.html"
+        "rewrite": "/index.html"
       },
       {
         "route": "/*.css",
-        "rewrite": "/login.html"
+        "rewrite": "/index.html"
       },
       {
         "route": "/*.js",
-        "rewrite": "/login.html"
+        "rewrite": "/index.html"
       }
     ],
     "mimeTypes": {
