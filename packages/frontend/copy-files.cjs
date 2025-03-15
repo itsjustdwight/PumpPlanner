@@ -7,7 +7,8 @@ const filesToCopy = [
   'exercise.html',
   'signup.html',
   'settings.html',
-  'login.html'
+  'login.html',
+  '6390166-hd_1280_720_25fps.mp4'
 ];
 
 const srcDir = path.resolve(__dirname); // Root frontend directory
