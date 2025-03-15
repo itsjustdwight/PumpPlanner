@@ -14,21 +14,24 @@ function SignUp() {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://pumplanner-abfaftgqbdfnaxbn.westus-01.azurewebsites.net///signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          username,
-          email,
-          pwd,
-          age: Number(age),     // or parseInt, parseFloat as needed
-          weight: Number(weight),
-          height: Number(height),
-          buildType
-        })
-      });
+      const response = await fetch(
+        "http://pumplanner-abfaftgqbdfnaxbn.westus-01.azurewebsites.net///signup",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            username,
+            email,
+            pwd,
+            age: Number(age), // or parseInt, parseFloat as needed
+            weight: Number(weight),
+            height: Number(height),
+            buildType
+          })
+        }
+      );
 
       if (!response.ok) {
         const message = await response.text();
@@ -55,58 +58,60 @@ function SignUp() {
       <form onSubmit={handleSubmit}>
         <label>
           Username:
-          <input 
+          <input
             type="text"
             value={username}
-            onChange={e => setUsername(e.target.value)}
+            onChange={(e) => setUsername(e.target.value)}
             required
           />
         </label>
         <label>
           Email:
-          <input 
+          <input
             type="email"
             value={email}
-            onChange={e => setEmail(e.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
         </label>
         <label>
           Password:
-          <input 
+          <input
             type="password"
             value={pwd}
-            onChange={e => setPwd(e.target.value)}
+            onChange={(e) => setPwd(e.target.value)}
             required
           />
         </label>
         <label>
           Age:
-          <input 
+          <input
             type="number"
             value={age}
-            onChange={e => setAge(e.target.value)}
+            onChange={(e) => setAge(e.target.value)}
           />
         </label>
         <label>
           Weight:
-          <input 
+          <input
             type="number"
             value={weight}
-            onChange={e => setWeight(e.target.value)}
+            onChange={(e) => setWeight(e.target.value)}
           />
         </label>
         <label>
           Height:
-          <input 
+          <input
             type="number"
             value={height}
-            onChange={e => setHeight(e.target.value)}
+            onChange={(e) => setHeight(e.target.value)}
           />
         </label>
         <label>
           Build Type:
-          <select value={buildType} onChange={e => setBuildType(e.target.value)}>
+          <select
+            value={buildType}
+            onChange={(e) => setBuildType(e.target.value)}>
             <option value="ectomorph">Ectomorph</option>
             <option value="mesomorph">Mesomorph</option>
             <option value="endomorph">Endomorph</option>

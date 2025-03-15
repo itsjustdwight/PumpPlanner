@@ -16,16 +16,13 @@ dotenv.config();
 const { MONGO_CONNECTION_STRING } = process.env;
 
 mongoose.set("debug", true);
-mongoose
-  .connect(
-    MONGO_CONNECTION_STRING +
-      {
-        dbName: "pumpplannerdb", // ✅ Explicitly specify database name
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-      }
-  )
-  .catch((error) => console.log(error));
+mongoose.connect(MONGO_CONNECTION_STRING, {
+  dbName: "pumpplannerdb",
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
+.catch((error) => console.log(error));
+
 
 const app = express();
 const port = 8000;
@@ -34,9 +31,9 @@ const port = 8000;
 app.use(express.json());
 app.use(cors());
 
-app.get("/", (req, res) => {
-  res.send("Welcome to PumpPlanner API!");
-});
+// app.get("/", (req, res) => {
+//   res.send("Welcome to PumpPlanner API!");
+// });
 
 //get exercises
 app.get("/exercises", async (req, res) => {

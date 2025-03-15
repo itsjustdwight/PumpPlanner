@@ -14,7 +14,11 @@ export async function registerUser(req, res) {
       lastName,
       username,
       email,
-      pwd // password from the client
+      pwd, // password from the client
+      age,
+      height,
+      weight,
+      workoutDays
     } = req.body;
 
     // 1) Validate required fields
@@ -23,7 +27,11 @@ export async function registerUser(req, res) {
       !lastName ||
       !username ||
       !email ||
-      !pwd
+      !pwd ||
+      !age ||
+      !height ||
+      !weight ||
+      !workoutDays
     ) {
       return res.status(400).send("Missing required fields.");
     }
@@ -48,7 +56,11 @@ export async function registerUser(req, res) {
       lastName,
       username,
       email,
-      password: hashedPassword
+      password: hashedPassword,
+      age,
+      height,
+      weight,
+      workoutDays
     });
 
     // 5) Save to database

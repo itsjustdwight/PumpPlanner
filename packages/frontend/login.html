@@ -5,7 +5,7 @@
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0" />
-    <title>Login | PumpPlanner</title>
+    <title>Login | PUMPlanner</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap"
       rel="stylesheet" />
@@ -131,6 +131,49 @@
       .signup-link a:hover {
         text-decoration: underline;
       }
+
+      /* Light mode styles */
+      .light-mode {
+        background-color: #ffffff;
+        color: #000000;
+      }
+
+      .light-mode .chart-container {
+        background: #f0f0f0;
+      }
+
+      .light-mode .icon-bar {
+        background: linear-gradient(145deg, #e0e0e0, #c0c0c0);
+        box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .light-mode footer {
+        background-color: #ffffff;
+        color: #000000;
+      }
+
+      /* Theme toggle button in top right corner with sun icon */
+      .theme-toggle {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: transparent;
+        border: none;
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+        transition:
+          transform 0.3s,
+          color 0.3s;
+      }
+
+      .theme-toggle:hover {
+        transform: scale(1.1);
+      }
+
+      .light-mode .theme-toggle {
+        color: black;
+      }
     </style>
   </head>
   <body>
@@ -166,7 +209,7 @@
       </form>
       <p class="signup-link">
         New to PumpPlanner?
-        <a href="/pages/signup.html">Sign up here</a>
+        <a href="signup.html">Sign up here</a>
       </p>
     </div>
 
@@ -183,7 +226,7 @@
 
         try {
           const response = await fetch(
-            `${API_BASE_URL}/exercises`,
+            `${API_BASE_URL}/login`,
             {
               method: "POST",
               headers: {
@@ -205,7 +248,7 @@
           console.log("Login success:", data);
           sessionStorage.setItem("loggedIn", data.token);
           alert(`Welcome back, ${username}!`);
-          window.location.href = "/index.html";
+          window.location.href = "index.html";
         } catch (err) {
           console.error("Login error:", err);
           alert(

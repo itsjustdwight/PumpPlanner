@@ -60,6 +60,22 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: true
+    },
+    age: {
+      type: String,
+      required: true 
+    },
+    height: {
+      type: String,
+      required: true
+    },
+    weight: {
+      type: String,
+      required: true
+    },
+    workoutDays: {
+      type: String,
+      required: true
     }
     // optional fields like age, weight, etc.
     // ...

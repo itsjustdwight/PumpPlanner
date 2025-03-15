@@ -30,8 +30,6 @@
       body {
         font-family: "Anton", sans-serif;
         color: #f0f0f0;
-        background: url("./assets/background.jpg") no-repeat
-          center center fixed;
         background-size: cover;
         min-height: 100vh;
         display: flex;
@@ -482,7 +480,9 @@
       async function loadExercises() {
         try {
           // Change the URL if your backend is different:
-          const res = await fetch(`${API_BASE_URL}/exercises`);
+          const res = await fetch(
+            "http://localhost:8000/exercises"
+          );
           if (!res.ok)
             throw new Error("Failed to load exercises");
           allExercises = await res.json();
