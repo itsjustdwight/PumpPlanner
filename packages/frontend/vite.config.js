@@ -7,7 +7,7 @@ const copyFiles = () => {
     try {
       copyFileSync(file, `dist/${file}`);
       console.log(`✅ Copied ${file} to dist/`);
-    } catch (err) {
+    } catch {
       console.warn(`⚠️ Warning: ${file} not found, skipping.`);
     }
   });
