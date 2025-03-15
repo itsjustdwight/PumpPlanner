@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && cpx \"pages/**/*\" dist/pages",
+    "build": "vite build",
+    "postbuild": "node copy-files.js",
     "lint": "eslint .",
     "preview": "vite preview"
   },
