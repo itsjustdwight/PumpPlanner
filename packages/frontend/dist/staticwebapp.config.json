@@ -16,6 +16,10 @@
   {
     "route": "/*",
     "rewrite": "/index.html"
+  },
+  {
+    "route": "/assets/*.",
+    "serve": "/public/"
   }
 ],
   "responseOverrides": {

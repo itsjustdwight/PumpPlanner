@@ -1,0 +1,36 @@
+{
+    "navigationFallback": {
+    "rewrite": "/index.html",
+    "exclude": ["/api/*", "/css/*", "/pages/*"]
+  },
+    "routes": [
+    {
+      "route": "/api/{*any}",
+      "rewrite": "/api/{any}",
+      "allowedRoles": ["anonymous"]
+    },
+    {
+      "route": "/pages/{*}.",
+      "rewrite": "/pages/{*}"
+    },
+    {
+      "route": "/*",
+      "rewrite": "/index.html"
+    },
+    {
+      "route": "/assets/*.",
+      "serve": "/public/"
+    }
+  ],
+    "responseOverrides": {
+      "404": {
+        "rewrite": "/index.html",
+        "statusCode": 200
+      }
+    },
+    "mimeTypes": {
+      ".json": "text/json",
+      ".css": "text/css"
+    }
+  }
+  
