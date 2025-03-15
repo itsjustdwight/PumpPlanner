@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up | PumpPlanner</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anton&display=swap"
+      rel="stylesheet" />
+    <link href="../css/style.css" rel="stylesheet" />
+    <style>
+      /* Fullscreen Video Background */
+      .video-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        z-index: -1; /* Send the video to the background */
+      }
+
+      .video-container video {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        min-width: 100%;
+        min-height: 100%;
+        width: auto;
+        height: auto;
+        object-fit: cover;
+        filter: grayscale(
+          100%
+        ); /* Makes the video black and white */
+      }
+
+      /* Dark overlay to improve text readability */
+      .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(
+          0,
+          0,
+          0,
+          0.5
+        ); /* Adjust darkness for readability */
+        z-index: 0;
+      }
+
+      body {
+        font-family: "Anton", sans-serif;
+        color: #f0f0f0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+
+      .signup-container {
+        background-color: rgba(
+          255,
+          255,
+          255,
+          0.15
+        ); /* More transparent */
+        padding: 30px;
+        border-radius: 10px;
+        text-align: center;
+        width: 500px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(10px); /* Frosted glass effect */
+        position: relative;
+        z-index: 1; /* Keep the form above the background */
+      }
+
+      .signup-container h1 {
+        color: #ff2600;
+        text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+        margin-bottom: 20px;
+      }
+
+      .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); /* Two columns */
+        gap: 15px;
+        margin-bottom: 15px;
+      }
+
+      .form-grid input {
+        font-family: "Anton", sans-serif;
+        width: 90%;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        background-color: #333;
+        color: #f0f0f0;
+      }
+
+      /* Full width input for workout days */
+      .full-width {
+        grid-column: span 2;
+      }
+
+      .signup-container button {
+        font-family: "Anton", sans-serif;
+        width: 100%;
+        padding: 15px;
+        border: none;
+        background-color: #4caf50;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        font-size: 18px;
+        margin-top: 10px;
+      }
+
+      .signup-container button:hover {
+        background-color: #45a049;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Video Background -->
+    <div class="video-container">
+      <video autoplay muted loop playsinline preload="auto">
+        <source
+          src="6390166-hd_1280_720_25fps.mp4"
+          type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+    </div>
+
+    <!-- Dark Overlay for readability -->
+    <div class="overlay"></div>
+
+    <div class="signup-container">
+      <h1>PumpPlanner</h1>
+
+      <h2>Sign Up</h2>
+      <form onsubmit="handleSignup(event)">
+        <div class="form-grid">
+          <input
+            type="text"
+            placeholder="First Name"
+            id="firstName"
+            required />
+          <input
+            type="text"
+            placeholder="Last Name"
+            id="lastName"
+            required />
+          <input
+            type="text"
+            placeholder="Username"
+            id="username"
+            required />
+          <input
+            type="email"
+            placeholder="Email"
+            id="email"
+            required />
+          <input
+            type="password"
+            placeholder="Password"
+            id="password"
+            required />
+          <input
+            type="text"
+            placeholder="Age"
+            id="age"
+            required />
+          <input
+            type="text"
+            placeholder="Height (ex: 5'5)"
+            id="height"
+            required />
+          <input
+            type="text"
+            placeholder="Weight (lbs)"
+            id="weight"
+            required />
+          <input
+            type="text"
+            placeholder="Workout Days (Su, M, Tu, W, Th, F, Sa)"
+            id="workoutDays"
+            class="full-width"
+            required />
+        </div>
+        <button type="submit">Sign Up</button>
+      </form>
+    </div>
+
+    <script>
+      const API_BASE_URL =
+        "https://pumplanner-307-bwa0h6dtfdfdftcv.westus-01.azurewebsites.net";
+
+      async function handleSignup(event) {
+        event.preventDefault();
+
+        const firstName =
+          document.getElementById("firstName").value;
+        const lastName =
+          document.getElementById("lastName").value;
+        const username =
+          document.getElementById("username").value;
+        const email = document.getElementById("email").value;
+        const password =
+          document.getElementById("password").value;
+        const age = document.getElementById("age").value;
+        const height = document.getElementById("height").value;
+        const weight = document.getElementById("weight").value;
+        const workoutDays =
+          document.getElementById("workoutDays").value;
+
+        const payload = {
+          firstName,
+          lastName,
+          username,
+          email,
+          pwd: password, // The backend code uses 'pwd' as the password field
+          age,
+          height,
+          weight,
+          workoutDays
+        };
+
+        try {
+          const response = await fetch(
+            `${API_BASE_URL}/signup`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload)
+            }
+          );
+
+          if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(errorText || "Sign-up failed");
+          }
+
+          const data = await response.json();
+          console.log("Sign-up success:", data);
+
+          alert(`Sign-up successful! Welcome, ${firstName}.`);
+          window.location.href = "login.html";
+        } catch (err) {
+          console.error("Error:", err);
+          alert("Sign-up error: " + err.message);
+        }
+      }
+    </script>
+  </body>
+</html>
